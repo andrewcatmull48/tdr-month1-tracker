@@ -51,10 +51,11 @@ function makeRandomPlan(){
  const chosen=firstPick?[firstPick.name]:[];
  const usedNames=new Set(chosen);
  const eggAvailable=remaining.some(p=>p.name==="Egg Omelette"&&p.qty>0);
- const useEgg=eggAvailable&&omelettesThisWeek<2&&Math.random()<0.22;
+ const useEgg=eggAvailable&&omelettesThisWeek<2&&Math.random()<0.12;
  const barPool=shuffle(bars.filter(p=>!recent.has(p.name))).concat(shuffle(bars.filter(p=>recent.has(p.name))));
  const chosenBar=barPool[0]||null;
- const singlesNeeded=chosenBar?5:7;
+ // The seven-portion target includes the bar's two portions and, if selected, the omelette.
+ const singlesNeeded=7-(chosenBar?2:0)-(useEgg?1:0);
  const regularPool=shuffle(singles.filter(p=>!usedNames.has(p.name)&&!recent.has(p.name)));
  const relaxedPool=shuffle(singles.filter(p=>!usedNames.has(p.name)));
  const pool=regularPool.length>=singlesNeeded-chosen.length?regularPool:relaxedPool;
@@ -62,9 +63,12 @@ function makeRandomPlan(){
   const pick=pool.shift();
   if(pick.qty>0&&!usedNames.has(pick.name)){chosen.push(pick.name);usedNames.add(pick.name)}
  }
- if(chosen.length<singlesNeeded){alert("There isn't enough remaining non-omelette stock to build a varied 7-portion plan. You can add Egg Omelette manually if appropriate.");return}
+ if(chosen.length<singlesNeeded){alert("There isn't enough remaining stock to build a varied 7-portion plan. You can edit the day manually.");return}
  if(useEgg)chosen.push("Egg Omelette");
- entries[day-1]=chosenBar?[...chosen,chosenBar.name]:chosen;
+ const plan=chosenBar?[...chosen,chosenBar.name]:chosen;
+ const total=plan.reduce((n,name)=>n+qty(name),0);
+ if(total!==7){alert("Couldn't build an exact 7-portion plan. Please try again.");return}
+ entries[day-1]=plan;
  save();render();
 }
 function render(){
