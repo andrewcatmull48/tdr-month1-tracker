@@ -35,8 +35,8 @@ function makeRandomPlan(){
   while(chosen.length<count){
    const eligible=candidates.filter(p=>p.qty>0&&!chosen.some(x=>x.name===p.name));
    if(!eligible.length)break;
-   const minUsed=Math.min(...eligible.map(p=>p.qty));
-   const tier=shuffle(eligible.filter(p=>p.qty===minUsed));
+   const maxRemaining=Math.max(...eligible.map(p=>p.qty));
+   const tier=shuffle(eligible.filter(p=>p.qty===maxRemaining));
    const pick=tier[0];chosen.push(pick);candidates=candidates.filter(p=>p.name!==pick.name);
   }
   return chosen.map(p=>p.name);
