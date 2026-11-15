@@ -35,9 +35,10 @@ OneSignalDeferred.push(async function(OneSignal) {
     window.tdrEnableNotifications = async function() {
       if (status) status.textContent = "Connecting this device to OneSignal…";
       try {
-        const granted = await OneSignal.Notifications.requestPermission();
-        if (!granted) {
-          if (status) status.textContent = "Permission was not granted. Check iPhone Settings → Notifications.";
+        await OneSignal.Notifications.requestPermission();
+        // requestPermission() resolves without a boolean; read the SDK permission state.
+        if (!OneSignal.Notifications.permission) {
+          if (status) status.textContent = "Notification permission is still off for this web app. Open it from your Home Screen and check iPhone Settings → Notifications.";
           return;
         }
         await OneSignal.User.PushSubscription.optIn();
@@ -54,48 +55,7 @@ OneSignalDeferred.push(async function(OneSignal) {
   }
 });
 </script>
-<script>
-window.OneSignalDeferred = window.OneSignalDeferred || [];
-window.tdrOneSignalReady = false;
-OneSignalDeferred.push(async function(OneSignal) {
-  await OneSignal.init({
-    appId: "75521477-054b-48f7-a2c3-4c016ad9a3de",
-    serviceWorkerPath: "tdr-month1-tracker/sw.js",
-    serviceWorkerParam: { scope: "/tdr-month1-tracker/" }
-  });
-  window.tdrOneSignalReady = true;
-  const btn = document.getElementById("enableNotifications");
-  if (btn) btn.disabled = false;
-  const status = document.getElementById("notificationStatus");
-  const push = OneSignal.User.PushSubscription;
-  const updateStatus = () => {
-    if (!status) return;
-    status.textContent = push.optedIn && push.id
-      ? "Connected to OneSignal on this device."
-      : OneSignal.Notifications.permission
-        ? "Permission is allowed, but this device is not yet subscribed. Tap Enable notifications to finish setup."
-        : "Notifications are not enabled on this device yet.";
-  };
-  updateStatus();
-  push.addEventListener("change", updateStatus);
-  window.tdrEnableNotifications = async function() {
-    if (status) status.textContent = "Connecting this device to OneSignal…";
-    try {
-      const granted = await OneSignal.Notifications.requestPermission();
-      if (!granted) {
-        if (status) status.textContent = "Permission was not granted. Check iPhone Settings → Notifications.";
-        return;
-      }
-      await OneSignal.User.PushSubscription.optIn();
-      updateStatus();
-      if (status && !(push.optedIn && push.id)) status.textContent = "Permission is allowed, but OneSignal has not confirmed a subscription yet. Please wait a moment and try again.";
-    } catch (error) {
-      console.error("OneSignal subscription setup failed:", error);
-      if (status) status.textContent = "OneSignal setup failed: " + (error && error.message ? error.message : "unknown error") + ". Please send us this message.";
-    }
-  };
-});
-</script>
+
 <style>
 :root{color-scheme:light dark;--bg:#f4f6f3;--card:#fff;--ink:#1d2923;--muted:#647168;--line:#e1e8e1;--green:#26734d;--soft:#e6f3ea;--soft-ink:#26734d;--note:#fff4d9;--note-ink:#58451c}*{box-sizing:border-box} @media(prefers-color-scheme:dark){:root{--bg:#101512;--card:#1c2420;--ink:#edf4ef;--muted:#a5b2a9;--line:#35423a;--green:#63b783;--soft:#263d30;--soft-ink:#b9edca;--note:#3b3422;--note-ink:#f4e5b7}.stat,.panel{background:#1c2420;color:#edf4ef}.stat strong,.panel h2,.nav strong{color:#edf4ef}.nav button,button,select{background:#26312b;color:#edf4ef;color-scheme:dark}.dayselect{color-scheme:dark}.progress{background:#303b34}.stockbar{background:#303b34}.stockbar div{background:#63b783}.note{background:var(--note);border-color:#65542f;color:var(--note-ink)}a{color:#8ed6a8}button,select{background:#26312b;color:var(--ink);border-color:var(--line)}.primary{background:var(--green);color:#07140c}.nav button:disabled{opacity:.4}#randomPlan{background:var(--soft)!important;color:var(--soft-ink)!important}#reset{background:#26312b;color:var(--ink)}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,sans-serif}header{background:#172b25;color:white;padding:24px 18px;border-radius:0 0 24px 24px}h1{margin:6px 0;font-size:27px}header p{margin:0;color:#d5e3d9;font-size:14px}main{max-width:720px;margin:auto;padding:16px 14px 36px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat,.panel{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}.stat strong{display:block;font-size:22px}.stat span,.muted{font-size:12px;color:var(--muted)}.progress{height:8px;background:#e8eee8;border-radius:20px;margin:12px 0 4px;overflow:hidden}.progress div{height:100%;background:var(--green);width:0}.panel{margin-top:15px}h2{font-size:18px;margin:0 0 12px}.nav{display:flex;gap:8px;align-items:center}.nav button,button,select{padding:10px;border:1px solid var(--line);background:var(--card);border-radius:10px;font-size:15px;color:var(--ink)}.nav strong{flex:1;text-align:center}.dayselect{width:100%;margin:12px 0;accent-color:var(--green)}.daycount{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:8px 0}.slot{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.slot select{width:100%;min-width:0;font-size:13px}.slot small{white-space:nowrap;color:var(--muted)}.slot button{padding:6px 10px;color:#923d3d}.primary{width:100%;background:var(--green);color:white;border:0;margin-top:10px}.stockrow{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin:12px 0 5px}.stockbar{height:6px;background:#edf1ed;border-radius:10px;overflow:hidden}.stockbar div{height:100%;background:#5b9b73}.note{background:#fff4d9;border:1px solid #f0dfb3;border-radius:12px;padding:12px;font-size:13px;color:#58451c;margin-top:16px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:16px}
 </style></head><body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Month 1</h1><p>Your portions, daily checklist and remaining stock.</p></header><main>
