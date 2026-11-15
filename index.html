@@ -7,20 +7,38 @@ window.tdrOneSignalReady = false;
 OneSignalDeferred.push(async function(OneSignal) {
   await OneSignal.init({
     appId: "75521477-054b-48f7-a2c3-4c016ad9a3de",
-    serviceWorkerPath: "tdr-month1-tracker/sw.js",
+    serviceWorkerPath: "/tdr-month1-tracker/sw.js",
     serviceWorkerParam: { scope: "/tdr-month1-tracker/" }
   });
   window.tdrOneSignalReady = true;
   const btn = document.getElementById("enableNotifications");
   if (btn) btn.disabled = false;
   const status = document.getElementById("notificationStatus");
-  if (status) status.textContent = OneSignal.Notifications.permission ? "Notifications are allowed on this device." : "Notifications are not enabled on this device yet.";
+  const push = OneSignal.User.PushSubscription;
+  const updateStatus = () => {
+    if (!status) return;
+    status.textContent = push.optedIn && push.id
+      ? "Connected to OneSignal on this device."
+      : OneSignal.Notifications.permission
+        ? "Permission is allowed, but this device is not yet subscribed. Tap Enable notifications to finish setup."
+        : "Notifications are not enabled on this device yet.";
+  };
+  updateStatus();
+  push.addEventListener("change", updateStatus);
   window.tdrEnableNotifications = async function() {
+    if (status) status.textContent = "Connecting this device to OneSignal…";
     try {
-      await OneSignal.Notifications.requestPermission();
-      if (status) status.textContent = OneSignal.Notifications.permission ? "Notifications are enabled on this device." : "Permission has not been granted. Check your device settings.";
+      const granted = await OneSignal.Notifications.requestPermission();
+      if (!granted) {
+        if (status) status.textContent = "Permission was not granted. Check iPhone Settings → Notifications.";
+        return;
+      }
+      await OneSignal.User.PushSubscription.optIn();
+      updateStatus();
+      if (status && !(push.optedIn && push.id)) status.textContent = "Permission is allowed, but OneSignal has not confirmed a subscription yet. Please wait a moment and try again.";
     } catch (error) {
-      if (status) status.textContent = "Could not request permission. Please try again from your Home Screen app.";
+      console.error("OneSignal subscription setup failed:", error);
+      if (status) status.textContent = "OneSignal setup failed: " + (error && error.message ? error.message : "unknown error") + ". Please send us this message.";
     }
   };
 });
