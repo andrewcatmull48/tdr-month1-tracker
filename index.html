@@ -69,6 +69,7 @@ OneSignalDeferred.push(async function(OneSignal) {
 <p class="muted">Add any product and set its type, how many programme portions one item provides, and how many items you have in this month's stock. These are tracking settings only — follow your coach for what counts as a portion.</p>
 <div class="formgrid">
 <label>Product name<input id="productName" placeholder="e.g. Lemon Pudding"></label>
+<label>Product range<select id="productLine"><option>Nupo Diet (TDR)</option><option>One Meal</option><option>Other</option></select></label>
 <label>Product type<select id="productType"><option>Shake</option><option>Soup</option><option>Meal</option><option>Pudding</option><option>Bar</option><option>Other</option></select></label>
 <label>Portions per item<input id="productPortions" type="number" min="1" value="1"></label>
 <label>Stock quantity (items)<input id="productStock" type="number" min="0" value="0"></label>
@@ -101,7 +102,7 @@ const initialProducts=[
  ["Chocolate Shake","Shake",1,12],["Chocolate Mint Shake","Shake",1,10],["Caffe Latte Shake","Shake",1,10],["Chai Latte Shake","Shake",1,12],["Vanilla Shake","Shake",1,10],["Blueberry Raspberry","Shake",1,12],["Strawberry","Shake",1,10],["Egg Omelette","Meal",1,10],["Lemon Pudding","Pudding",1,12],["Chocolate Pudding","Pudding",1,12],["Mango Vanilla","Shake",1,12],["Vanilla Red Berries","Shake",1,12],["Apple Cinnamon","Pudding",1,12],["Chocolate Bar","Bar",2,15],["Cookie Crunch Bar","Bar",2,15]
 ];
 const target=196,storeKey="tdr-tracker-v2",legacyKey="tdr-month1-pwa-v1";let day=1,month=1;
-let catalog=initialProducts.map(([name,type,portionsPerItem,stock])=>({name,type,portionsPerItem,active:true}));
+let catalog=initialProducts.map(([name,type,portionsPerItem,stock])=>({name,type,line:"Nupo Diet (TDR)",portionsPerItem,active:true}));
 let months=Array.from({length:3},()=>({entries:Array.from({length:28},()=>[]),stock:{}}));
 initialProducts.forEach(([name,type,portionsPerItem,stock])=>months[0].stock[name]=stock);
 function loadData(){
@@ -124,7 +125,7 @@ function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.fl
 function makeRandomPlan(){
  const existing=current().entries[day-1];
  if(existing.length&&!confirm("Replace the products currently logged/planned for Day "+day+" with a new random plan?"))return;
- const available=catalog.filter(p=>p.active&&(stockLeft(p.name)+existing.filter(x=>x===p.name).length)>0);
+ const available=catalog.filter(p=>p.active&&p.line!=="One Meal"&&(stockLeft(p.name)+existing.filter(x=>x===p.name).length)>0);
  const availableQty=name=>stockLeft(name)+existing.filter(x=>x===name).length;
  const recent=new Set(current().entries.slice(Math.max(0,day-3),day-1).flat());
  const weekStart=Math.floor((day-1)/7)*7;
@@ -158,7 +159,7 @@ function renderInventory(){
   const left=stockLeft(p.name),initial=current().stock[p.name]||0,usedItems=used(p.name);
   const row=document.createElement("div");row.className="stockrow";
   const n=document.createElement("span"),v=document.createElement("b");
-  n.textContent=p.name+" · "+p.type;
+  n.textContent=p.name+" · "+p.line+" · "+p.type;
   v.textContent=left+" items left ("+(left*p.portionsPerItem)+" portions)";
   row.append(n,v);
   const bar=document.createElement("div"),fill=document.createElement("div");bar.className="stockbar";fill.style.width=(initial?Math.max(0,left/initial*100):0)+"%";bar.append(fill);
@@ -167,7 +168,7 @@ function renderInventory(){
  $("productList").replaceChildren();
  catalog.filter(p=>p.active).forEach(p=>{
   const row=document.createElement("div");row.className="productrow";
-  const info=document.createElement("span");info.textContent=p.name+" · "+p.type+" · "+p.portionsPerItem+" portion(s)/item · "+(current().stock[p.name]||0)+" in stock";
+  const info=document.createElement("span");info.textContent=p.name+" · "+p.line+" · "+p.type+" · "+p.portionsPerItem+" portion(s)/item · "+(current().stock[p.name]||0)+" in stock";
   const edit=document.createElement("button");edit.textContent="Edit";edit.onclick=()=>editProduct(p.name);
   const remove=document.createElement("button");remove.textContent="Remove";remove.onclick=()=>removeProduct(p.name);
   row.append(info,edit,remove);$("productList").append(row);
@@ -176,11 +177,12 @@ function renderInventory(){
 function editProduct(name){
  const p=product(name);if(!p)return;
  const nextName=prompt("Product name",p.name);if(nextName===null)return;
+ const line=prompt("Product range (Nupo Diet (TDR), One Meal, Other)",p.line);if(line===null)return;
  const type=prompt("Product type (Shake, Soup, Meal, Pudding, Bar, Other)",p.type);if(type===null)return;
  const portions=Number(prompt("Programme portions per item",p.portionsPerItem));if(!Number.isInteger(portions)||portions<1){alert("Enter a whole number of at least 1.");return}
  const stock=Number(prompt("Stock quantity in Month "+month+" (items)",current().stock[name]||0));if(!Number.isInteger(stock)||stock<0){alert("Enter a stock quantity of 0 or more.");return}
  const clean=nextName.trim();if(!clean|| (clean!==name&&product(clean))){alert("Choose a non-empty name that isn't already in use.");return}
- p.name=clean;p.type=type.trim()||"Other";p.portionsPerItem=portions;
+ p.name=clean;p.line=line.trim()||"Other";p.type=type.trim()||"Other";p.portionsPerItem=portions;
  months.forEach(m=>{m.entries.forEach(a=>a.forEach((x,i)=>{if(x===name)a[i]=clean}));if(Object.prototype.hasOwnProperty.call(m.stock,name)){m.stock[clean]=m.stock[name];delete m.stock[name]}});
  current().stock[clean]=stock;save();render();
 }
@@ -199,7 +201,7 @@ function render(){
  const entries=current().entries,list=entries[day-1],count=list.reduce((a,n)=>a+portionCount(n),0),sum=total();
  $("dayTitle").textContent="Day "+day+" of 28 · Month "+month;$("dayRange").value=day;$("prev").disabled=day===1;$("next").disabled=day===28;$("dayCount").textContent=count+" / 7 portions";
  $("slots").replaceChildren();
- list.forEach((name,i)=>{const row=document.createElement("div");row.className="slot";const sel=document.createElement("select");const empty=document.createElement("option");empty.value="";empty.textContent="Choose product";sel.append(empty);catalog.filter(p=>p.active||p.name===name).forEach(p=>{const o=document.createElement("option");o.value=p.name;o.textContent=p.name;sel.append(o)});sel.value=name;sel.onchange=()=>{list[i]=sel.value;if(!sel.value)list.splice(i,1);save();render()};const q=document.createElement("small");q.textContent=name?portionCount(name)+" portion"+(portionCount(name)>1?"s":""):"";const del=document.createElement("button");del.textContent="×";del.onclick=()=>{list.splice(i,1);save();render()};row.append(sel,q,del);$("slots").append(row)});
+ list.forEach((name,i)=>{const row=document.createElement("div");row.className="slot";const sel=document.createElement("select");const empty=document.createElement("option");empty.value="";empty.textContent="Choose product";sel.append(empty);catalog.filter(p=>(p.active||p.name===name)&&p.line!=="One Meal").forEach(p=>{const o=document.createElement("option");o.value=p.name;o.textContent=p.name+" · "+p.line;sel.append(o)});sel.value=name;sel.onchange=()=>{list[i]=sel.value;if(!sel.value)list.splice(i,1);save();render()};const q=document.createElement("small");q.textContent=name?portionCount(name)+" portion"+(portionCount(name)>1?"s":""):"";const del=document.createElement("button");del.textContent="×";del.onclick=()=>{list.splice(i,1);save();render()};row.append(sel,q,del);$("slots").append(row)});
  const complete=entries.filter(a=>a.reduce((s,n)=>s+portionCount(n),0)===7).length;
  $("logged").textContent=sum+"/196";$("days").textContent=complete+"/28";
  const remaining=catalog.filter(p=>p.active).reduce((n,p)=>n+stockLeft(p.name)*p.portionsPerItem,0);
@@ -212,7 +214,7 @@ $("carryForward").onclick=carryForward;
 $("saveProduct").onclick=()=>{
  const name=$("productName").value.trim(),type=$("productType").value,portions=Number($("productPortions").value),stock=Number($("productStock").value);
  if(!name||product(name)||!Number.isInteger(portions)||portions<1||!Number.isInteger(stock)||stock<0){alert("Enter a unique product name, a whole-number portion value of at least 1, and a stock quantity of 0 or more.");return}
- catalog.push({name,type,portionsPerItem:portions,active:true});current().stock[name]=stock;
+ catalog.push({name,type,line:$("productLine").value,portionsPerItem:portions,active:true});current().stock[name]=stock;
  $("productName").value="";$("productStock").value="0";save();render();
 };
 $("prev").onclick=()=>{day=Math.max(1,day-1);render()};$("next").onclick=()=>{day=Math.min(28,day+1);render()};$("dayRange").oninput=e=>{day=+e.target.value;render()};$("randomPlan").onclick=makeRandomPlan;
