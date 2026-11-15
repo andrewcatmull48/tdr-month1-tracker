@@ -1,9 +1,35 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#172b25"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="TDR Month 1"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><title>TDR Month 1 Tracker</title>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+window.tdrOneSignalReady = false;
+OneSignalDeferred.push(async function(OneSignal) {
+  await OneSignal.init({
+    appId: "75521477-054b-48f7-a2c3-4c016ad9a3de",
+    serviceWorkerPath: "tdr-month1-tracker/sw.js",
+    serviceWorkerParam: { scope: "/tdr-month1-tracker/" }
+  });
+  window.tdrOneSignalReady = true;
+  const btn = document.getElementById("enableNotifications");
+  if (btn) btn.disabled = false;
+  const status = document.getElementById("notificationStatus");
+  if (status) status.textContent = OneSignal.Notifications.permission ? "Notifications are allowed on this device." : "Notifications are not enabled on this device yet.";
+  window.tdrEnableNotifications = async function() {
+    try {
+      await OneSignal.Notifications.requestPermission();
+      if (status) status.textContent = OneSignal.Notifications.permission ? "Notifications are enabled on this device." : "Permission has not been granted. Check your device settings.";
+    } catch (error) {
+      if (status) status.textContent = "Could not request permission. Please try again from your Home Screen app.";
+    }
+  };
+});
+</script>
 <style>
 :root{color-scheme:light dark;--bg:#f4f6f3;--card:#fff;--ink:#1d2923;--muted:#647168;--line:#e1e8e1;--green:#26734d;--soft:#e6f3ea;--soft-ink:#26734d;--note:#fff4d9;--note-ink:#58451c}*{box-sizing:border-box} @media(prefers-color-scheme:dark){:root{--bg:#101512;--card:#1c2420;--ink:#edf4ef;--muted:#a5b2a9;--line:#35423a;--green:#63b783;--soft:#263d30;--soft-ink:#b9edca;--note:#3b3422;--note-ink:#f4e5b7}.stat,.panel{background:#1c2420;color:#edf4ef}.stat strong,.panel h2,.nav strong{color:#edf4ef}.nav button,button,select{background:#26312b;color:#edf4ef;color-scheme:dark}.dayselect{color-scheme:dark}.progress{background:#303b34}.stockbar{background:#303b34}.stockbar div{background:#63b783}.note{background:var(--note);border-color:#65542f;color:var(--note-ink)}a{color:#8ed6a8}button,select{background:#26312b;color:var(--ink);border-color:var(--line)}.primary{background:var(--green);color:#07140c}.nav button:disabled{opacity:.4}#randomPlan{background:var(--soft)!important;color:var(--soft-ink)!important}#reset{background:#26312b;color:var(--ink)}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,sans-serif}header{background:#172b25;color:white;padding:24px 18px;border-radius:0 0 24px 24px}h1{margin:6px 0;font-size:27px}header p{margin:0;color:#d5e3d9;font-size:14px}main{max-width:720px;margin:auto;padding:16px 14px 36px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat,.panel{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}.stat strong{display:block;font-size:22px}.stat span,.muted{font-size:12px;color:var(--muted)}.progress{height:8px;background:#e8eee8;border-radius:20px;margin:12px 0 4px;overflow:hidden}.progress div{height:100%;background:var(--green);width:0}.panel{margin-top:15px}h2{font-size:18px;margin:0 0 12px}.nav{display:flex;gap:8px;align-items:center}.nav button,button,select{padding:10px;border:1px solid var(--line);background:var(--card);border-radius:10px;font-size:15px;color:var(--ink)}.nav strong{flex:1;text-align:center}.dayselect{width:100%;margin:12px 0;accent-color:var(--green)}.daycount{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:8px 0}.slot{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.slot select{width:100%;min-width:0;font-size:13px}.slot small{white-space:nowrap;color:var(--muted)}.slot button{padding:6px 10px;color:#923d3d}.primary{width:100%;background:var(--green);color:white;border:0;margin-top:10px}.stockrow{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin:12px 0 5px}.stockbar{height:6px;background:#edf1ed;border-radius:10px;overflow:hidden}.stockbar div{height:100%;background:#5b9b73}.note{background:#fff4d9;border:1px solid #f0dfb3;border-radius:12px;padding:12px;font-size:13px;color:#58451c;margin-top:16px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:16px}
 </style></head><body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Month 1</h1><p>Your portions, daily checklist and remaining stock.</p></header><main>
 <div class="stats"><div class="stat"><strong id="logged">0/196</strong><span>Portions logged</span></div><div class="stat"><strong id="days">0/28</strong><span>Days completed</span></div><div class="stat"><strong id="remaining">206</strong><span>Stock remaining</span></div></div><div class="progress"><div id="progress"></div></div><div class="muted" id="progressText">0% of monthly target</div>
+<section class="panel"><h2>Reminders</h2><p class="muted">Enable push notifications on this device to receive your programme reminders.</p><button class="primary" id="enableNotifications" disabled onclick="window.tdrEnableNotifications&&window.tdrEnableNotifications()">Enable notifications</button><p class="muted" id="notificationStatus">Loading notification service…</p><p class="muted">On iPhone, open this tracker from its Home Screen icon and allow notifications when prompted.</p></section>
 <section class="panel"><h2>Daily tracker</h2><div class="nav"><button id="prev">‹</button><strong id="dayTitle">Day 1 of 28</strong><button id="next">›</button></div><input id="dayRange" class="dayselect" type="range" min="1" max="28" value="1"><div class="daycount"><span>Choose what you consumed</span><b id="dayCount">0 / 7 portions</b></div><div id="slots"></div><button class="primary" id="addSlot">+ Add a product</button><button class="primary" id="randomPlan" style="background:#e6f3ea;color:#26734d">✨ Create random 7-portion plan</button><p class="muted">Random plans lead with a café-style shake, rotate flavours to keep things varied, and only occasionally include Egg Omelette (no more than twice in a seven-day block). Bars count as two portions, with a maximum of one bar per day. Edit the suggestions to suit your day.</p></section>
 <section class="panel"><h2>Stock remaining</h2><p class="muted">Stock automatically reduces as you log products.</p><div id="stock"></div></section>
 
