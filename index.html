@@ -16,9 +16,8 @@ OneSignalDeferred.push(async function(OneSignal) {
   try {
     await OneSignal.init({
       appId: "75521477-054b-48f7-a2c3-4c016ad9a3de",
-      serviceWorkerPath: "/tdr-month1-tracker/OneSignalSDKWorker.js",
-      serviceWorkerParam: { scope: "/tdr-month1-tracker/" },
-      serviceWorkerOverrideForTypical: true
+      serviceWorkerPath: "sw.js",
+      serviceWorkerParam: { scope: "/tdr-month1-tracker/" }
     });
     window.tdrOneSignalReady = true;
     if (btn) btn.disabled = false;
