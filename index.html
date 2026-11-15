@@ -4,7 +4,7 @@
 :root{color-scheme:light;--bg:#f4f6f3;--card:#fff;--ink:#1d2923;--muted:#647168;--line:#e1e8e1;--green:#26734d}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,sans-serif}header{background:#172b25;color:white;padding:24px 18px;border-radius:0 0 24px 24px}h1{margin:6px 0;font-size:27px}header p{margin:0;color:#d5e3d9;font-size:14px}main{max-width:720px;margin:auto;padding:16px 14px 36px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat,.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}.stat strong{display:block;font-size:22px}.stat span,.muted{font-size:12px;color:var(--muted)}.progress{height:8px;background:#e8eee8;border-radius:20px;margin:12px 0 4px;overflow:hidden}.progress div{height:100%;background:var(--green);width:0}.panel{margin-top:15px}h2{font-size:18px;margin:0 0 12px}.nav{display:flex;gap:8px;align-items:center}.nav button,button,select{padding:10px;border:1px solid var(--line);background:white;border-radius:10px;font-size:15px;color:var(--ink)}.nav strong{flex:1;text-align:center}.dayselect{width:100%;margin:12px 0;accent-color:var(--green)}.daycount{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:8px 0}.slot{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.slot select{width:100%;min-width:0;font-size:13px}.slot small{white-space:nowrap;color:var(--muted)}.slot button{padding:6px 10px;color:#923d3d}.primary{width:100%;background:var(--green);color:white;border:0;margin-top:10px}.stockrow{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin:12px 0 5px}.stockbar{height:6px;background:#edf1ed;border-radius:10px;overflow:hidden}.stockbar div{height:100%;background:#5b9b73}.note{background:#fff4d9;border:1px solid #f0dfb3;border-radius:12px;padding:12px;font-size:13px;color:#58451c;margin-top:16px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:16px}
 </style></head><body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Month 1</h1><p>Your portions, daily checklist and remaining stock.</p></header><main>
 <div class="stats"><div class="stat"><strong id="logged">0/196</strong><span>Portions logged</span></div><div class="stat"><strong id="days">0/28</strong><span>Days completed</span></div><div class="stat"><strong id="remaining">206</strong><span>Stock remaining</span></div></div><div class="progress"><div id="progress"></div></div><div class="muted" id="progressText">0% of monthly target</div>
-<section class="panel"><h2>Daily tracker</h2><div class="nav"><button id="prev">‹</button><strong id="dayTitle">Day 1 of 28</strong><button id="next">›</button></div><input id="dayRange" class="dayselect" type="range" min="1" max="28" value="1"><div class="daycount"><span>Choose what you consumed</span><b id="dayCount">0 / 7 portions</b></div><div id="slots"></div><button class="primary" id="addSlot">+ Add a product</button><button class="primary" id="randomPlan" style="background:#e6f3ea;color:#26734d">✨ Create random 7-portion plan</button><p class="muted">Use the random planner for a balanced suggestion, then edit anything you like. It considers your previous two days and remaining stock. Bars count as two portions, with a maximum of one bar per day.</p></section>
+<section class="panel"><h2>Daily tracker</h2><div class="nav"><button id="prev">‹</button><strong id="dayTitle">Day 1 of 28</strong><button id="next">›</button></div><input id="dayRange" class="dayselect" type="range" min="1" max="28" value="1"><div class="daycount"><span>Choose what you consumed</span><b id="dayCount">0 / 7 portions</b></div><div id="slots"></div><button class="primary" id="addSlot">+ Add a product</button><button class="primary" id="randomPlan" style="background:#e6f3ea;color:#26734d">✨ Create random 7-portion plan</button><p class="muted">Random plans lead with a café-style shake, rotate flavours to keep things varied, and only occasionally include Egg Omelette (no more than twice in a seven-day block). Bars count as two portions, with a maximum of one bar per day. Edit the suggestions to suit your day.</p></section>
 <section class="panel"><h2>Stock remaining</h2><p class="muted">Stock automatically reduces as you log products.</p><div id="stock"></div></section>
 <section class="panel"><h2>Starting inventory</h2><p class="muted">146 non-bar portions + 60 bar portions = 206 total. Monthly target: 196. Potential surplus: 10 portions.</p></section>
 <div class="note"><b>Programme reminder:</b> This is a stock and logging aid, not a prescribed meal plan. Follow your coach's instructions for daily portions, product combinations, bar frequency, hydration and diabetes/medication monitoring.</div><button id="reset" style="width:100%;margin-top:12px">Reset all logged products</button><div class="footer">Progress is saved in this browser on this device. It does not sync between devices.</div></main>
@@ -21,39 +21,36 @@ function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.fl
 function makeRandomPlan(){
  const existing=entries[day-1];
  if(existing.length&&!confirm("Replace the products currently logged/planned for Day "+day+" with a new random plan?"))return;
- // Calculate available stock excluding the day being regenerated.
  const remaining=products.map(p=>({name:p[0],qty:p[1]-entries.reduce((sum,arr,idx)=>sum+(idx===day-1?0:arr.filter(x=>x===p[0]).length*qty(p[0])),0),bar:p[0].includes("Bar")}));
  const recent=new Set(entries.slice(Math.max(0,day-3),day-1).flat().filter(Boolean));
- const singles=remaining.filter(p=>!p.bar&&p.qty>0);
+ const weekStart=Math.floor((day-1)/7)*7;
+ const omelettesThisWeek=entries.slice(weekStart,weekStart+7).reduce((n,arr,idx)=>n+(weekStart+idx===day-1?0:arr.filter(x=>x==="Egg Omelette").length),0);
+ const singles=remaining.filter(p=>!p.bar&&p.qty>0&&p.name!=="Egg Omelette");
  const bars=remaining.filter(p=>p.bar&&p.qty>=2);
- // Prefer products not used in either of the previous two days; relax this only if stock/variety requires it.
- function chooseSingles(pool,count){
-  const chosen=[];
-  let candidates=shuffle(pool.filter(p=>!recent.has(p.name)));
-  if(candidates.length<count)candidates=shuffle(pool);
-  // Select from the least-consumed products first, randomising ties, to spread stock across the month.
-  while(chosen.length<count){
-   const eligible=candidates.filter(p=>p.qty>0&&!chosen.some(x=>x.name===p.name));
-   if(!eligible.length)break;
-   const maxRemaining=Math.max(...eligible.map(p=>p.qty));
-   const tier=shuffle(eligible.filter(p=>p.qty===maxRemaining));
-   const pick=tier[0];chosen.push(pick);candidates=candidates.filter(p=>p.name!==pick.name);
-  }
-  return chosen.map(p=>p.name);
+ const cafeNames=["Caffe Latte Shake","Chai Latte Shake"];
+ const cafePool=shuffle(singles.filter(p=>cafeNames.includes(p.name)&&!recent.has(p.name)));
+ const cafeFallback=shuffle(singles.filter(p=>cafeNames.includes(p.name)));
+ const firstPick=(cafePool.length?cafePool:cafeFallback)[0];
+ const chosen=firstPick?[firstPick.name]:[];
+ const usedNames=new Set(chosen);
+ const eggAvailable=remaining.some(p=>p.name==="Egg Omelette"&&p.qty>0);
+ const useEgg=eggAvailable&&omelettesThisWeek<2&&Math.random()<0.22;
+ const barPool=shuffle(bars.filter(p=>!recent.has(p.name))).concat(shuffle(bars.filter(p=>recent.has(p.name))));
+ const chosenBar=barPool[0]||null;
+ const singlesNeeded=chosenBar?5:7;
+ const regularPool=shuffle(singles.filter(p=>!usedNames.has(p.name)&&!recent.has(p.name)));
+ const relaxedPool=shuffle(singles.filter(p=>!usedNames.has(p.name)));
+ const pool=regularPool.length>=singlesNeeded-chosen.length?regularPool:relaxedPool;
+ while(chosen.length<singlesNeeded&&pool.length){
+  const pick=pool.shift();
+  if(pick.qty>0&&!usedNames.has(pick.name)){chosen.push(pick.name);usedNames.add(pick.name)}
  }
- const chosenBar=bars.length?shuffle(bars.filter(p=>!recent.has(p.name))).concat(shuffle(bars.filter(p=>recent.has(p.name))))[0]:null;
- const barName=chosenBar?chosenBar.name:null;
- const singlesNeeded=barName?5:7;
- let chosen=chooseSingles(singles,singlesNeeded);
- if(chosen.length<singlesNeeded){
-   const relaxed=chooseSingles(singles,singlesNeeded);
-   chosen=[...new Set([...chosen,...relaxed])].slice(0,singlesNeeded);
- }
- if(chosen.length<singlesNeeded){alert("There isn't enough remaining stock to build a full 7-portion plan. Check your stock entries.");return}
- entries[day-1]=shuffle(barName?[...chosen,barName]:chosen);
+ if(chosen.length<singlesNeeded){alert("There isn't enough remaining non-omelette stock to build a varied 7-portion plan. You can add Egg Omelette manually if appropriate.");return}
+ if(useEgg)chosen.push("Egg Omelette");
+ entries[day-1]=chosenBar?[...chosen,chosenBar.name]:chosen;
  save();render();
 }
-\nfunction render(){
+function render(){
  const list=entries[day-1],count=list.reduce((a,n)=>a+qty(n),0),sum=total();
  $("dayTitle").textContent="Day "+day+" of 28";$("dayRange").value=day;$("prev").disabled=day===1;$("next").disabled=day===28;$("dayCount").textContent=count+" / 7 portions";
  $("slots").replaceChildren();
