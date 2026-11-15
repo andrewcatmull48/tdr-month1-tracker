@@ -23,7 +23,7 @@ function makeRandomPlan(){
  if(existing.length&&!confirm("Replace the products currently logged/planned for Day "+day+" with a new random plan?"))return;
  // Calculate available stock excluding the day being regenerated.
  const remaining=products.map(p=>({name:p[0],qty:p[1]-entries.reduce((sum,arr,idx)=>sum+(idx===day-1?0:arr.filter(x=>x===p[0]).length*qty(p[0])),0),bar:p[0].includes("Bar")}));
- const recent=new Set([...entries[Math.max(0,day-3)],...entries[Math.max(0,day-2)]].filter(Boolean));
+ const recent=new Set(entries.slice(Math.max(0,day-3),day-1).flat().filter(Boolean));
  const singles=remaining.filter(p=>!p.bar&&p.qty>0);
  const bars=remaining.filter(p=>p.bar&&p.qty>=2);
  // Prefer products not used in either of the previous two days; relax this only if stock/variety requires it.
