@@ -231,7 +231,9 @@ function renderInsights(){
  }
  $("varietyInsights").textContent=names.length?names.join(", "):"Log products to see your variety.";
  const expired=catalog.filter(p=>p.active&&p.expiry&&p.expiry<new Date().toISOString().slice(0,10));
- $("stockForecast").textContent=expired.length?"Check best-before dates: "+expired.map(p=>p.name+" ("+p.expiry+")").join(", "):"No expired dates recorded. Keep stock quantities up to date for a useful forecast.";
+ const daysElapsed=Math.max(1,day),usedItems=catalog.filter(p=>p.active&&p.line!=="One Meal").map(p=>{const consumed=used(p.name);const left=stockLeft(p.name);const rate=consumed/daysElapsed;return rate>0?{name:p.name,left,days:left/rate}:null}).filter(Boolean).sort((a,b)=>a.days-b.days).slice(0,4);
+ const forecast=usedItems.length?usedItems.map(p=>p.name+": about "+Math.max(0,Math.floor(p.days))+" days of stock").join(" · "):"Log consumed products to build a stock-use forecast.";
+ $("stockForecast").textContent=(expired.length?"Check best-before dates: "+expired.map(p=>p.name+" ("+p.expiry+")").join(", ")+". ":"")+forecast;
 }
 function render(){
  const entries=current().entries,list=entries[day-1],count=list.reduce((a,n)=>a+portionCount(n),0),sum=total();
