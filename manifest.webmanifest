@@ -1,6 +1,6 @@
 {
-  "name": "TDR Month 1 Tracker",
-  "short_name": "TDR Month 1",
+  "name": "TDR Programme Companion",
+  "short_name": "TDR Companion",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
