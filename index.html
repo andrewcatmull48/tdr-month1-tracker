@@ -64,16 +64,11 @@ OneSignalDeferred.push(async function(OneSignal) {
 .app-tabs{position:fixed;z-index:100;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--card) 94%,transparent);border-top:1px solid var(--line);backdrop-filter:blur(18px)}
 .app-tabs .tab{border:0;background:transparent;color:var(--muted);padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:20px;border-radius:10px}
 .app-tabs .tab small{font-size:10px;font-weight:600}.app-tabs .tab.active{color:var(--green);background:var(--soft)}
-main{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+main{padding-bottom:32px}
 .app-page>.panel:first-child{margin-top:4px}
-<body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Programme Companion</h1><p>Your daily plan, progress, drinks and programme tools.</p></header><main>
-<div class="app-tabs" role="navigation" aria-label="Main navigation">
-<button class="tab active" data-page="today"><span>◷</span><small>Today</small></button>
-<button class="tab" data-page="drinks"><span>♧</span><small>Drinks</small></button>
-<button class="tab" data-page="stock"><span>▤</span><small>Stock</small></button>
-<button class="tab" data-page="resources"><span>⌂</span><small>Resources</small></button>
-<button class="tab" data-page="settings"><span>⚙</span><small>More</small></button>
-</div>
+</style></head><body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Programme Companion</h1><p>Your daily plan, progress, drinks and programme tools.</p></header><main>
+<div class="topnav"><button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Open menu">☰ <span>Menu</span></button><nav id="appMenu" class="app-menu" hidden>
+<button data-page="today">Today</button><button data-page="drinks">Drinks</button><button data-page="stock">Stock</button><button data-page="resources">Resources</button><button data-page="insights">Insights</button><button data-page="settings">Settings</button><button data-page="help">Help</button></nav></div>
 <section class="app-page active" id="page-today"><div class="stats"><div class="stat"><strong id="logged">0/196</strong><span>Portions logged</span></div><div class="stat"><strong id="days">0/28</strong><span>Days completed</span></div><div class="stat"><strong id="remaining">206</strong><span>Stock remaining</span></div></div><div class="progress"><div id="progress"></div></div><div class="muted" id="progressText">0% of monthly target</div>
 <section class="panel"><h2>Daily tracker</h2><div class="nav"><button id="prev">‹</button><strong id="dayTitle">Day 1 of 28</strong><button id="next">›</button></div><input id="dayRange" class="dayselect" type="range" min="1" max="28" value="1"><div class="daycount"><span>Choose what you consumed</span><b id="dayCount">0 / 7 portions</b></div><div id="slots"></div><button class="primary" id="addSlot">+ Add a product</button><button class="primary" id="randomPlan" style="background:#e6f3ea;color:#26734d">✨ Create random 7-portion plan</button><p class="muted">Random plans lead with a café-style shake, rotate flavours to keep things varied, and only occasionally include Egg Omelette (no more than twice in a seven-day block). Bars count as two portions, with a maximum of one bar per day. Edit the suggestions to suit your day.</p></section>
 </section>
@@ -100,7 +95,7 @@ main{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
 <label>Product range<select id="productLine"><option>Nupo Diet (TDR)</option><option>One Meal</option><option>Other</option></select></label>
 <label>Product type<select id="productType"><option>Shake</option><option>Soup</option><option>Meal</option><option>Pudding</option><option>Bar</option><option>Other</option></select></label>
 <label>Portions per item<input id="productPortions" type="number" min="1" value="1"></label>
-<label>Stock quantity (items)<input id="productStock" type="number" min="0" value="0"></label>
+<label>Stock quantity (items)<input id="productStock" type="number" min="0" value="0"></label><label>Best-before date<input id="productExpiry" type="date"></label>
 </div>
 <button class="primary" id="saveProduct">Add product to this month</button>
 <div id="productList" style="margin-top:12px"></div>
@@ -113,28 +108,30 @@ main{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
 <p class="muted">The Liva link opens its App Store page; if it is already installed, use the Open button there. A direct jump into your personal app account needs an app-specific sign-in/deep link, which this tracker cannot safely guess.</p>
 </section>
 </section>
-<section class="app-page" id="page-settings"><section class="panel"><h2>Starting inventory</h2><p class="muted">146 non-bar portions + 60 bar portions = 206 total. Monthly target: 196. Potential surplus: 10 portions.</p></section>
+<section class="app-page" id="page-insights"><section class="panel"><h2>Insights</h2><div class="stats"><div class="stat"><strong id="insightDays">0/28</strong><span>Complete days</span></div><div class="stat"><strong id="insightStreak">0</strong><span>Current streak</span></div><div class="stat"><strong id="insightVariety">0</strong><span>Products used</span></div></div><h3>Weekly completion</h3><div id="weeklyInsights"></div><h3>Product variety</h3><div id="varietyInsights" class="muted">Log products to see your variety.</div><h3>Stock forecast</h3><div id="stockForecast" class="muted"></div></section></section>
+<section class="app-page" id="page-help"><section class="panel"><h2>Help</h2><h3>Daily tracking</h3><p>Use Today to add the products you have consumed. Tick each item when you have had it. The tracker saves on this device automatically.</p><h3>Plans and portions</h3><p>The random planner is a suggestion tool, not medical advice. Check all plans against your coach’s instructions. You can change any product or quantity.</p><h3>Stock</h3><p>Stock counts are based on items in each monthly inventory. Carry-forward copies unused stock into the next month. Expiry dates are reminders only.</p><h3>Reminders</h3><p>Push notifications require permission on your device. Notification delivery depends on your device and browser settings.</p><h3>Data and privacy</h3><p>Your entries are stored locally in this browser. They do not automatically sync between devices. Keep a backup if you change or reset your device.</p></section></section>
+<section class="app-page" id="page-settings"><section class="panel"><h2>Personalisation</h2><label>Daily portion target <input id="dailyTarget" type="number" min="1" max="20" value="7"></label><label style="display:block;margin-top:10px">Monthly target (days) <input id="targetDays" type="number" min="1" max="31" value="28"></label><button id="savePreferences" class="primary">Save preferences</button><p class="muted" id="preferenceStatus">Targets affect progress displays only; follow your coach for clinical targets.</p></section><section class="panel"><h2>Starting inventory</h2><p class="muted">146 non-bar portions + 60 bar portions = 206 total. Monthly target: 196. Potential surplus: 10 portions.</p></section>
 <div class="note"><b>Programme reminder:</b> This is a stock and logging aid, not a prescribed meal plan. Follow your coach's instructions for daily portions, product combinations, bar frequency, hydration and diabetes/medication monitoring.</div><button id="reset" style="width:100%;margin-top:12px">Reset all logged products</button><section class="panel"><h2>Reminders</h2><p class="muted">Enable push notifications on this device to receive your programme reminders.</p><button class="primary" id="enableNotifications" disabled onclick="window.tdrEnableNotifications&&window.tdrEnableNotifications()">Enable notifications</button><p class="muted" id="notificationStatus">Loading notification service…</p><p class="muted">On iPhone, open this tracker from its Home Screen icon and allow notifications when prompted.</p></section>
-<section class="panel"><h2>Reminders</h2><p class="muted">Enable push notifications on this device to receive your programme reminders.</p><button class="primary" id="enableNotifications" disabled onclick="window.tdrEnableNotifications&&window.tdrEnableNotifications()">Enable notifications</button><p class="muted" id="notificationStatus">Loading notification service…</p><p class="muted">On iPhone, open this tracker from its Home Screen icon and allow notifications when prompted.</p></section><div class="footer">Progress is saved in this browser on this device. It does not sync between devices.</div></section></main>
+<div class="footer">Progress is saved in this browser on this device. It does not sync between devices.</div></section></main>
 <script>
 const initialProducts=[
  ["Chocolate Shake","Shake",1,12],["Chocolate Mint Shake","Shake",1,10],["Caffe Latte Shake","Shake",1,10],["Chai Latte Shake","Shake",1,12],["Vanilla Shake","Shake",1,10],["Blueberry Raspberry","Shake",1,12],["Strawberry","Shake",1,10],["Egg Omelette","Meal",1,10],["Lemon Pudding","Pudding",1,12],["Chocolate Pudding","Pudding",1,12],["Mango Vanilla","Shake",1,12],["Vanilla Red Berries","Shake",1,12],["Apple Cinnamon","Pudding",1,12],["Chocolate Bar","Bar",2,15],["Cookie Crunch Bar","Bar",2,15]
 ];
-const target=196,storeKey="tdr-tracker-v2",legacyKey="tdr-month1-pwa-v1";let day=1,month=1;
+let target=196,dailyTarget=7,targetDays=28;const storeKey="tdr-tracker-v2",legacyKey="tdr-month1-pwa-v1";let day=1,month=1;
 let catalog=initialProducts.map(([name,type,portionsPerItem,stock])=>({name,type,line:"Nupo Diet (TDR)",portionsPerItem,active:true}));
-let months=Array.from({length:3},()=>({entries:Array.from({length:28},()=>[]),stock:{}}));
+let months=Array.from({length:3},()=>({entries:Array.from({length:28},()=>[]),consumed:Array.from({length:28},()=>[]),stock:{}}));
 initialProducts.forEach(([name,type,portionsPerItem,stock])=>months[0].stock[name]=stock);
 function loadData(){
  try{
   const v2=JSON.parse(localStorage.getItem(storeKey));
-  if(v2&&Array.isArray(v2.months)&&Array.isArray(v2.catalog)){catalog=v2.catalog;months=v2.months;return}
+  if(v2&&Array.isArray(v2.months)&&Array.isArray(v2.catalog)){catalog=v2.catalog;months=v2.months;dailyTarget=v2.dailyTarget||7;targetDays=v2.targetDays||28;target=dailyTarget*targetDays;months.forEach(m=>{if(!m.consumed)m.consumed=Array.from({length:28},()=>[])});return}
   const old=JSON.parse(localStorage.getItem(legacyKey));
   if(old&&Array.isArray(old.entries)&&old.entries.length===28)months[0].entries=old.entries;
  }catch(e){}
 }
 loadData();
 const $=id=>document.getElementById(id),current=()=>months[month-1],product=name=>catalog.find(p=>p.name===name),portionCount=name=>product(name)?.portionsPerItem||1;
-function save(){try{localStorage.setItem(storeKey,JSON.stringify({catalog,months}))}catch(e){alert("Couldn't save changes on this device. Check available browser storage.")}}
+function save(){try{localStorage.setItem(storeKey,JSON.stringify({catalog,months,dailyTarget,targetDays}))}catch(e){alert("Couldn't save changes on this device. Check available browser storage.")}}
 function allEntries(){return months.flatMap(m=>m.entries)}
 function used(name,which=month){return months[which-1].entries.flat().filter(x=>x===name).length}
 function usedPortions(name,which=month){return used(name,which)*portionCount(name)}
@@ -179,7 +176,7 @@ function renderInventory(){
   const row=document.createElement("div");row.className="stockrow";
   const n=document.createElement("span"),v=document.createElement("b");
   n.textContent=p.name+" · "+p.line+" · "+p.type;
-  v.textContent=left+" items left ("+(left*p.portionsPerItem)+" portions)";
+  v.textContent=left+" items left ("+(left*p.portionsPerItem)+" portions)"+(p.expiry?" · BB "+p.expiry:"");
   row.append(n,v);
   const bar=document.createElement("div"),fill=document.createElement("div");bar.className="stockbar";fill.style.width=(initial?Math.max(0,left/initial*100):0)+"%";bar.append(fill);
   $("stock").append(row,bar);
@@ -218,11 +215,11 @@ function carryForward(){
 }
 function render(){
  const entries=current().entries,list=entries[day-1],count=list.reduce((a,n)=>a+portionCount(n),0),sum=total();
- $("dayTitle").textContent="Day "+day+" of 28 · Month "+month;$("dayRange").value=day;$("prev").disabled=day===1;$("next").disabled=day===28;$("dayCount").textContent=count+" / 7 portions";
+ $("dayTitle").textContent="Day "+day+" of 28 · Month "+month;$("dayRange").value=day;$("prev").disabled=day===1;$("next").disabled=day===28;$("dayCount").textContent=count+" / "+dailyTarget+" portions";
  $("slots").replaceChildren();
- list.forEach((name,i)=>{const row=document.createElement("div");row.className="slot";const sel=document.createElement("select");const empty=document.createElement("option");empty.value="";empty.textContent="Choose product";sel.append(empty);catalog.filter(p=>(p.active||p.name===name)&&p.line!=="One Meal").forEach(p=>{const o=document.createElement("option");o.value=p.name;o.textContent=p.name+" · "+p.line;sel.append(o)});sel.value=name;sel.onchange=()=>{list[i]=sel.value;if(!sel.value)list.splice(i,1);save();render()};const q=document.createElement("small");q.textContent=name?portionCount(name)+" portion"+(portionCount(name)>1?"s":""):"";const del=document.createElement("button");del.textContent="×";del.onclick=()=>{list.splice(i,1);save();render()};row.append(sel,q,del);$("slots").append(row)});
- const complete=entries.filter(a=>a.reduce((s,n)=>s+portionCount(n),0)===7).length;
- $("logged").textContent=sum+"/196";$("days").textContent=complete+"/28";
+ list.forEach((name,i)=>{const row=document.createElement("div");row.className="slot";const sel=document.createElement("select");const empty=document.createElement("option");empty.value="";empty.textContent="Choose product";sel.append(empty);catalog.filter(p=>(p.active||p.name===name)&&p.line!=="One Meal").forEach(p=>{const o=document.createElement("option");o.value=p.name;o.textContent=p.name+" · "+p.line;sel.append(o)});sel.value=name;sel.onchange=()=>{list[i]=sel.value;if(!sel.value)list.splice(i,1);save();render()};const q=document.createElement("label");q.style.cssText="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted)";const check=document.createElement("input");check.type="checkbox";check.checked=!!current().consumed?.[day-1]?.[i];check.onchange=()=>{current().consumed=current().consumed||Array.from({length:28},()=>[]);current().consumed[day-1][i]=check.checked;save();render()};q.append(check,document.createTextNode("Had it"));const del=document.createElement("button");del.textContent="×";del.onclick=()=>{list.splice(i,1);save();render()};row.append(sel,q,del);$("slots").append(row)});
+ const complete=entries.filter(a=>a.reduce((s,n)=>s+portionCount(n),0)>=dailyTarget).length;
+ $("logged").textContent=sum+"/"+target;$("days").textContent=complete+"/"+targetDays;
  const remaining=catalog.filter(p=>p.active&&p.line!=="One Meal").reduce((n,p)=>n+stockLeft(p.name)*p.portionsPerItem,0);
  $("remaining").textContent=remaining;
  const pct=Math.min(100,sum/target*100);$("progress").style.width=pct+"%";$("progressText").textContent=Math.round(pct)+"% of monthly target";
@@ -240,11 +237,14 @@ $("prev").onclick=()=>{day=Math.max(1,day-1);render()};$("next").onclick=()=>{da
 $("addSlot").onclick=()=>{if(current().entries[day-1].length>=7){alert("Maximum seven product entries. Remove or change one first.");return}current().entries[day-1].push("");save();render()};
 $("reset").onclick=()=>{if(confirm("Reset all three months of logged products? Inventory quantities will be kept.")){months.forEach(m=>m.entries=Array.from({length:28},()=>[]));save();render()}};
 render();
+$("dailyTarget").value=dailyTarget;$("targetDays").value=targetDays;
+$("savePreferences").onclick=()=>{const d=Number($("dailyTarget").value),t=Number($("targetDays").value);if(!Number.isInteger(d)||d<1||d>20||!Number.isInteger(t)||t<1||t>31){alert("Enter valid targets.");return}dailyTarget=d;targetDays=t;target=d*t;save();render();$("preferenceStatus").textContent="Preferences saved."};
 function showPage(name){
  document.querySelectorAll(".app-page").forEach(p=>p.classList.toggle("active",p.id==="page-"+name));
  document.querySelectorAll(".app-tabs .tab").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
  window.scrollTo({top:0,behavior:"instant"});
 }
-document.querySelectorAll(".app-tabs .tab").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+document.querySelectorAll(".app-menu button").forEach(b=>b.addEventListener("click",()=>{showPage(b.dataset.page);$("#appMenu").hidden=true;$("#menuToggle").setAttribute("aria-expanded","false")}));
+$("#menuToggle").onclick=()=>{const open=$("#appMenu").hidden;$("#appMenu").hidden=!open;$("#menuToggle").setAttribute("aria-expanded",String(open))};
 if("serviceWorker"in navigator) addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 </script></body></html>
