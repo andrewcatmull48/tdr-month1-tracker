@@ -124,7 +124,8 @@ function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.fl
 function makeRandomPlan(){
  const existing=current().entries[day-1];
  if(existing.length&&!confirm("Replace the products currently logged/planned for Day "+day+" with a new random plan?"))return;
- const available=catalog.filter(p=>p.active&&stockLeft(p.name)>0);
+ const available=catalog.filter(p=>p.active&&(stockLeft(p.name)+existing.filter(x=>x===p.name).length)>0);
+ const availableQty=name=>stockLeft(name)+existing.filter(x=>x===name).length;
  const recent=new Set(current().entries.slice(Math.max(0,day-3),day-1).flat());
  const weekStart=Math.floor((day-1)/7)*7;
  const omelettesThisWeek=current().entries.slice(weekStart,weekStart+7).reduce((n,a,i)=>n+(weekStart+i===day-1?0:a.filter(x=>x==="Egg Omelette").length),0);
@@ -136,12 +137,12 @@ function makeRandomPlan(){
  const chosen=[first.name],usedNames=new Set(chosen);
  const egg=available.find(p=>p.name==="Egg Omelette");
  const useEgg=!!egg&&omelettesThisWeek<2&&Math.random()<0.12;
- const bars=shuffle(available.filter(p=>p.portionsPerItem===2&&p.name.toLowerCase().includes("bar")&&!recent.has(p.name))).concat(shuffle(available.filter(p=>p.portionsPerItem===2&&p.name.toLowerCase().includes("bar")&&recent.has(p.name))));
+ const bars=shuffle(available.filter(p=>p.type==="Bar"&&p.portionsPerItem===2&&!recent.has(p.name))).concat(shuffle(available.filter(p=>p.type==="Bar"&&p.portionsPerItem===2&&recent.has(p.name))));
  const chosenBar=bars[0]||null;
  const singlesNeeded=7-(chosenBar?2:0)-(useEgg?1:0);
  let pool=shuffle(singles.filter(p=>!usedNames.has(p.name)&&!recent.has(p.name)));
  if(pool.length<singlesNeeded-chosen.length)pool=shuffle(singles.filter(p=>!usedNames.has(p.name)));
- while(chosen.length<singlesNeeded&&pool.length){const p=pool.shift();if(stockLeft(p.name)>0&&!usedNames.has(p.name)){chosen.push(p.name);usedNames.add(p.name)}}
+ while(chosen.length<singlesNeeded&&pool.length){const p=pool.shift();if(availableQty(p.name)>0&&!usedNames.has(p.name)){chosen.push(p.name);usedNames.add(p.name)}}
  if(chosen.length<singlesNeeded){alert("There isn't enough available stock to build an exact 7-portion plan. Add stock or edit the day manually.");return}
  if(useEgg)chosen.push("Egg Omelette");
  const plan=chosenBar?[...chosen,chosenBar.name]:chosen;
