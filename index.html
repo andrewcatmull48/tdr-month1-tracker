@@ -58,12 +58,25 @@ OneSignalDeferred.push(async function(OneSignal) {
 
 <style>
 :root{color-scheme:light dark;--bg:#f4f6f3;--card:#fff;--ink:#1d2923;--muted:#647168;--line:#e1e8e1;--green:#26734d;--soft:#e6f3ea;--soft-ink:#26734d;--note:#fff4d9;--note-ink:#58451c}*{box-sizing:border-box} @media(prefers-color-scheme:dark){:root{--bg:#101512;--card:#1c2420;--ink:#edf4ef;--muted:#a5b2a9;--line:#35423a;--green:#63b783;--soft:#263d30;--soft-ink:#b9edca;--note:#3b3422;--note-ink:#f4e5b7}.stat,.panel{background:#1c2420;color:#edf4ef}.stat strong,.panel h2,.nav strong{color:#edf4ef}.nav button,button,select{background:#26312b;color:#edf4ef;color-scheme:dark}.dayselect{color-scheme:dark}.progress{background:#303b34}.stockbar{background:#303b34}.stockbar div{background:#63b783}.note{background:var(--note);border-color:#65542f;color:var(--note-ink)}a{color:#8ed6a8}button,select{background:#26312b;color:var(--ink);border-color:var(--line)}.primary{background:var(--green);color:#07140c}.nav button:disabled{opacity:.4}#randomPlan{background:var(--soft)!important;color:var(--soft-ink)!important}#reset{background:#26312b;color:var(--ink)}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,sans-serif}header{background:#172b25;color:white;padding:24px 18px;border-radius:0 0 24px 24px}h1{margin:6px 0;font-size:27px}header p{margin:0;color:#d5e3d9;font-size:14px}main{max-width:720px;margin:auto;padding:16px 14px 36px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat,.panel{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}.stat strong{display:block;font-size:22px}.stat span,.muted{font-size:12px;color:var(--muted)}.progress{height:8px;background:#e8eee8;border-radius:20px;margin:12px 0 4px;overflow:hidden}.progress div{height:100%;background:var(--green);width:0}.panel{margin-top:15px}h2{font-size:18px;margin:0 0 12px}.nav{display:flex;gap:8px;align-items:center}.nav button,button,select{padding:10px;border:1px solid var(--line);background:var(--card);border-radius:10px;font-size:15px;color:var(--ink)}.nav strong{flex:1;text-align:center}.dayselect{width:100%;margin:12px 0;accent-color:var(--green)}.daycount{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:8px 0}.slot{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.slot select{width:100%;min-width:0;font-size:13px}.slot small{white-space:nowrap;color:var(--muted)}.slot button{padding:6px 10px;color:#923d3d}.primary{width:100%;background:var(--green);color:white;border:0;margin-top:10px}.stockrow{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin:12px 0 5px}.stockbar{height:6px;background:#edf1ed;border-radius:10px;overflow:hidden}.stockbar div{height:100%;background:#5b9b73}.note{background:#fff4d9;border:1px solid #f0dfb3;border-radius:12px;padding:12px;font-size:13px;color:#58451c;margin-top:16px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:16px}
-</style></head><body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Month 1</h1><p>Your portions, daily checklist and remaining stock.</p></header><main>
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.formgrid label{font-size:12px;color:var(--muted)}.formgrid input,.formgrid select{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font-size:15px}.productrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}.productrow button{padding:6px 8px}.monthBtn.active{background:var(--green);color:white;border-color:var(--green)}@media(max-width:420px){.formgrid{grid-template-columns:1fr}}\n</style></head><body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Month 1</h1><p>Your portions, daily checklist and remaining stock.</p></header><main>
 <div class="stats"><div class="stat"><strong id="logged">0/196</strong><span>Portions logged</span></div><div class="stat"><strong id="days">0/28</strong><span>Days completed</span></div><div class="stat"><strong id="remaining">206</strong><span>Stock remaining</span></div></div><div class="progress"><div id="progress"></div></div><div class="muted" id="progressText">0% of monthly target</div>
-<section class="panel"><h2>Reminders</h2><p class="muted">Enable push notifications on this device to receive your programme reminders.</p><button class="primary" id="enableNotifications" disabled onclick="window.tdrEnableNotifications&&window.tdrEnableNotifications()">Enable notifications</button><p class="muted" id="notificationStatus">Loading notification service…</p><p class="muted">On iPhone, open this tracker from its Home Screen icon and allow notifications when prompted.</p></section>
+<section class="panel"><h2>Monthly inventory</h2>
+<p class="muted">Each month has its own stock and 28-day log. Choose a month, add or edit products, and carry unused stock into the next month when you're ready.</p>
+<div class="nav" style="margin-bottom:10px"><button class="monthBtn" data-month="1">Month 1</button><button class="monthBtn" data-month="2">Month 2</button><button class="monthBtn" data-month="3">Month 3</button></div>
+<div class="nav" style="margin-bottom:10px"><strong id="monthHeading">Month 1 inventory</strong><button id="carryForward">Carry stock forward →</button></div>
+<div id="stock"></div>
+<details style="margin-top:14px"><summary><b>Manage products and stock</b></summary>
+<p class="muted">Add any product and set its type, how many programme portions one item provides, and how many items you have in this month's stock. These are tracking settings only — follow your coach for what counts as a portion.</p>
+<div class="formgrid">
+<label>Product name<input id="productName" placeholder="e.g. Lemon Pudding"></label>
+<label>Product type<select id="productType"><option>Shake</option><option>Soup</option><option>Meal</option><option>Pudding</option><option>Bar</option><option>Other</option></select></label>
+<label>Portions per item<input id="productPortions" type="number" min="1" value="1"></label>
+<label>Stock quantity (items)<input id="productStock" type="number" min="0" value="0"></label>
+</div>
+<button class="primary" id="saveProduct">Add product to this month</button>
+<div id="productList" style="margin-top:12px"></div>
+</details></section>
 <section class="panel"><h2>Daily tracker</h2><div class="nav"><button id="prev">‹</button><strong id="dayTitle">Day 1 of 28</strong><button id="next">›</button></div><input id="dayRange" class="dayselect" type="range" min="1" max="28" value="1"><div class="daycount"><span>Choose what you consumed</span><b id="dayCount">0 / 7 portions</b></div><div id="slots"></div><button class="primary" id="addSlot">+ Add a product</button><button class="primary" id="randomPlan" style="background:#e6f3ea;color:#26734d">✨ Create random 7-portion plan</button><p class="muted">Random plans lead with a café-style shake, rotate flavours to keep things varied, and only occasionally include Egg Omelette (no more than twice in a seven-day block). Bars count as two portions, with a maximum of one bar per day. Edit the suggestions to suit your day.</p></section>
-<section class="panel"><h2>Stock remaining</h2><p class="muted">Stock automatically reduces as you log products.</p><div id="stock"></div></section>
-
 <section class="panel"><h2>Drinks to enjoy</h2>
 <p class="muted">A handy reminder from your programme guidance.</p>
 <h3 style="font-size:15px;margin:14px 0 6px;color:#26734d">Still cold drinks</h3>
@@ -74,6 +87,7 @@ OneSignalDeferred.push(async function(OneSignal) {
 <ul><li>Filter or instant coffee</li><li>Tea, herbal teas and spiced teas, e.g. unsweetened masala chai</li><li>Bovril</li><li>Hot bouillon</li><li>Milk/milk alternatives — from 50 ml allowance (excluding full-fat milk)</li></ul>
 <p class="muted">Use the allowances and guidance given by your own coach if anything differs.</p>
 </section>
+<section class="panel"><h2>Reminders</h2><p class="muted">Enable push notifications on this device to receive your programme reminders.</p><button class="primary" id="enableNotifications" disabled onclick="window.tdrEnableNotifications&&window.tdrEnableNotifications()">Enable notifications</button><p class="muted" id="notificationStatus">Loading notification service…</p><p class="muted">On iPhone, open this tracker from its Home Screen icon and allow notifications when prompted.</p></section>
 <section class="panel"><h2>Programme links</h2>
 <p><a href="https://momentanewcastle.com/nhs-type-2-diabetes-path-to-remission/" target="_blank" rel="noopener">Momenta — participant resources</a></p>
 <p><a href="https://help.momenta.livahealth.com/en/category/eb2b47" target="_blank" rel="noopener">Momenta / Liva — Help Centre</a></p>
@@ -83,59 +97,127 @@ OneSignalDeferred.push(async function(OneSignal) {
 <section class="panel"><h2>Starting inventory</h2><p class="muted">146 non-bar portions + 60 bar portions = 206 total. Monthly target: 196. Potential surplus: 10 portions.</p></section>
 <div class="note"><b>Programme reminder:</b> This is a stock and logging aid, not a prescribed meal plan. Follow your coach's instructions for daily portions, product combinations, bar frequency, hydration and diabetes/medication monitoring.</div><button id="reset" style="width:100%;margin-top:12px">Reset all logged products</button><div class="footer">Progress is saved in this browser on this device. It does not sync between devices.</div></main>
 <script>
-const products=[["Chocolate Shake",12],["Chocolate Mint Shake",10],["Caffe Latte Shake",10],["Chai Latte Shake",12],["Vanilla Shake",10],["Blueberry Raspberry",12],["Strawberry",10],["Egg Omelette",10],["Lemon Pudding",12],["Chocolate Pudding",12],["Mango Vanilla",12],["Vanilla Red Berries",12],["Apple Cinnamon",12],["Chocolate Bar",30],["Cookie Crunch Bar",30]];
-const target=196,totalStock=206,key="tdr-month1-pwa-v1";let day=1,entries=Array.from({length:28},()=>[]);
-try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&Array.isArray(saved.entries)&&saved.entries.length===28)entries=saved.entries}catch(e){}
-const $=id=>document.getElementById(id),qty=n=>products.find(p=>p[0]===n)?.[0].includes("Bar")?2:1;
-function save(){try{localStorage.setItem(key,JSON.stringify({entries}))}catch(e){}}
-function total(){return entries.flat().reduce((a,n)=>a+qty(n),0)}
-function used(n){return entries.flat().filter(x=>x===n).length*qty(n)}
-
+const initialProducts=[
+ ["Chocolate Shake","Shake",1,12],["Chocolate Mint Shake","Shake",1,10],["Caffe Latte Shake","Shake",1,10],["Chai Latte Shake","Shake",1,12],["Vanilla Shake","Shake",1,10],["Blueberry Raspberry","Shake",1,12],["Strawberry","Shake",1,10],["Egg Omelette","Meal",1,10],["Lemon Pudding","Pudding",1,12],["Chocolate Pudding","Pudding",1,12],["Mango Vanilla","Shake",1,12],["Vanilla Red Berries","Shake",1,12],["Apple Cinnamon","Pudding",1,12],["Chocolate Bar","Bar",2,15],["Cookie Crunch Bar","Bar",2,15]
+];
+const target=196,storeKey="tdr-tracker-v2",legacyKey="tdr-month1-pwa-v1";let day=1,month=1;
+let catalog=initialProducts.map(([name,type,portionsPerItem,stock])=>({name,type,portionsPerItem,active:true}));
+let months=Array.from({length:3},()=>({entries:Array.from({length:28},()=>[]),stock:{}}));
+initialProducts.forEach(([name,type,portionsPerItem,stock])=>months[0].stock[name]=stock);
+function loadData(){
+ try{
+  const v2=JSON.parse(localStorage.getItem(storeKey));
+  if(v2&&Array.isArray(v2.months)&&Array.isArray(v2.catalog)){catalog=v2.catalog;months=v2.months;return}
+  const old=JSON.parse(localStorage.getItem(legacyKey));
+  if(old&&Array.isArray(old.entries)&&old.entries.length===28)months[0].entries=old.entries;
+ }catch(e){}
+}
+loadData();
+const $=id=>document.getElementById(id),current=()=>months[month-1],product=name=>catalog.find(p=>p.name===name),portionCount=name=>product(name)?.portionsPerItem||1;
+function save(){try{localStorage.setItem(storeKey,JSON.stringify({catalog,months}))}catch(e){alert("Couldn't save changes on this device. Check available browser storage.")}}
+function allEntries(){return months.flatMap(m=>m.entries)}
+function used(name,which=month){return months[which-1].entries.flat().filter(x=>x===name).length}
+function usedPortions(name,which=month){return used(name,which)*portionCount(name)}
+function stockLeft(name,which=month){return Math.max(0,(months[which-1].stock[name]||0)-used(name,which))}
+function total(){return current().entries.flat().reduce((a,n)=>a+portionCount(n),0)}
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
 function makeRandomPlan(){
- const existing=entries[day-1];
+ const existing=current().entries[day-1];
  if(existing.length&&!confirm("Replace the products currently logged/planned for Day "+day+" with a new random plan?"))return;
- const remaining=products.map(p=>({name:p[0],qty:p[1]-entries.reduce((sum,arr,idx)=>sum+(idx===day-1?0:arr.filter(x=>x===p[0]).length*qty(p[0])),0),bar:p[0].includes("Bar")}));
- const recent=new Set(entries.slice(Math.max(0,day-3),day-1).flat().filter(Boolean));
+ const available=catalog.filter(p=>p.active&&stockLeft(p.name)>0);
+ const recent=new Set(current().entries.slice(Math.max(0,day-3),day-1).flat());
  const weekStart=Math.floor((day-1)/7)*7;
- const omelettesThisWeek=entries.slice(weekStart,weekStart+7).reduce((n,arr,idx)=>n+(weekStart+idx===day-1?0:arr.filter(x=>x==="Egg Omelette").length),0);
- const singles=remaining.filter(p=>!p.bar&&p.qty>0&&p.name!=="Egg Omelette");
- const bars=remaining.filter(p=>p.bar&&p.qty>=2);
- const cafeNames=["Caffe Latte Shake","Chai Latte Shake"];
- const cafePool=shuffle(singles.filter(p=>cafeNames.includes(p.name)&&!recent.has(p.name)));
- const cafeFallback=shuffle(singles.filter(p=>cafeNames.includes(p.name)));
- const firstPick=(cafePool.length?cafePool:cafeFallback)[0];
- const chosen=firstPick?[firstPick.name]:[];
- const usedNames=new Set(chosen);
- const eggAvailable=remaining.some(p=>p.name==="Egg Omelette"&&p.qty>0);
- const useEgg=eggAvailable&&omelettesThisWeek<2&&Math.random()<0.12;
- const barPool=shuffle(bars.filter(p=>!recent.has(p.name))).concat(shuffle(bars.filter(p=>recent.has(p.name))));
- const chosenBar=barPool[0]||null;
- // The seven-portion target includes the bar's two portions and, if selected, the omelette.
+ const omelettesThisWeek=current().entries.slice(weekStart,weekStart+7).reduce((n,a,i)=>n+(weekStart+i===day-1?0:a.filter(x=>x==="Egg Omelette").length),0);
+ const singles=available.filter(p=>p.portionsPerItem===1&&p.name!=="Egg Omelette");
+ const cafe=shuffle(singles.filter(p=>["Caffe Latte Shake","Chai Latte Shake"].includes(p.name)&&!recent.has(p.name)));
+ const cafeFallback=shuffle(singles.filter(p=>["Caffe Latte Shake","Chai Latte Shake"].includes(p.name)));
+ const first=(cafe.length?cafe:cafeFallback)[0];
+ if(!first){alert("Add stock for a café-style shake to build the random plan.");return}
+ const chosen=[first.name],usedNames=new Set(chosen);
+ const egg=available.find(p=>p.name==="Egg Omelette");
+ const useEgg=!!egg&&omelettesThisWeek<2&&Math.random()<0.12;
+ const bars=shuffle(available.filter(p=>p.portionsPerItem===2&&p.name.toLowerCase().includes("bar")&&!recent.has(p.name))).concat(shuffle(available.filter(p=>p.portionsPerItem===2&&p.name.toLowerCase().includes("bar")&&recent.has(p.name))));
+ const chosenBar=bars[0]||null;
  const singlesNeeded=7-(chosenBar?2:0)-(useEgg?1:0);
- const regularPool=shuffle(singles.filter(p=>!usedNames.has(p.name)&&!recent.has(p.name)));
- const relaxedPool=shuffle(singles.filter(p=>!usedNames.has(p.name)));
- const pool=regularPool.length>=singlesNeeded-chosen.length?regularPool:relaxedPool;
- while(chosen.length<singlesNeeded&&pool.length){
-  const pick=pool.shift();
-  if(pick.qty>0&&!usedNames.has(pick.name)){chosen.push(pick.name);usedNames.add(pick.name)}
- }
- if(chosen.length<singlesNeeded){alert("There isn't enough remaining stock to build a varied 7-portion plan. You can edit the day manually.");return}
+ let pool=shuffle(singles.filter(p=>!usedNames.has(p.name)&&!recent.has(p.name)));
+ if(pool.length<singlesNeeded-chosen.length)pool=shuffle(singles.filter(p=>!usedNames.has(p.name)));
+ while(chosen.length<singlesNeeded&&pool.length){const p=pool.shift();if(stockLeft(p.name)>0&&!usedNames.has(p.name)){chosen.push(p.name);usedNames.add(p.name)}}
+ if(chosen.length<singlesNeeded){alert("There isn't enough available stock to build an exact 7-portion plan. Add stock or edit the day manually.");return}
  if(useEgg)chosen.push("Egg Omelette");
  const plan=chosenBar?[...chosen,chosenBar.name]:chosen;
- const total=plan.reduce((n,name)=>n+qty(name),0);
- if(total!==7){alert("Couldn't build an exact 7-portion plan. Please try again.");return}
- entries[day-1]=plan;
- save();render();
+ if(plan.reduce((n,name)=>n+portionCount(name),0)!==7){alert("Couldn't build an exact 7-portion plan. Please try again.");return}
+ current().entries[day-1]=plan;save();render();
+}
+function renderInventory(){
+ $("monthHeading").textContent="Month "+month+" inventory";
+ document.querySelectorAll(".monthBtn").forEach(b=>b.classList.toggle("active",+b.dataset.month===month));
+ $("carryForward").disabled=month===3;
+ $("stock").replaceChildren();
+ catalog.filter(p=>p.active).forEach(p=>{
+  const left=stockLeft(p.name),initial=current().stock[p.name]||0,usedItems=used(p.name);
+  const row=document.createElement("div");row.className="stockrow";
+  const n=document.createElement("span"),v=document.createElement("b");
+  n.textContent=p.name+" · "+p.type;
+  v.textContent=left+" items left ("+(left*p.portionsPerItem)+" portions)";
+  row.append(n,v);
+  const bar=document.createElement("div"),fill=document.createElement("div");bar.className="stockbar";fill.style.width=(initial?Math.max(0,left/initial*100):0)+"%";bar.append(fill);
+  $("stock").append(row,bar);
+ });
+ $("productList").replaceChildren();
+ catalog.filter(p=>p.active).forEach(p=>{
+  const row=document.createElement("div");row.className="productrow";
+  const info=document.createElement("span");info.textContent=p.name+" · "+p.type+" · "+p.portionsPerItem+" portion(s)/item · "+(current().stock[p.name]||0)+" in stock";
+  const edit=document.createElement("button");edit.textContent="Edit";edit.onclick=()=>editProduct(p.name);
+  const remove=document.createElement("button");remove.textContent="Remove";remove.onclick=()=>removeProduct(p.name);
+  row.append(info,edit,remove);$("productList").append(row);
+ });
+}
+function editProduct(name){
+ const p=product(name);if(!p)return;
+ const nextName=prompt("Product name",p.name);if(nextName===null)return;
+ const type=prompt("Product type (Shake, Soup, Meal, Pudding, Bar, Other)",p.type);if(type===null)return;
+ const portions=Number(prompt("Programme portions per item",p.portionsPerItem));if(!Number.isInteger(portions)||portions<1){alert("Enter a whole number of at least 1.");return}
+ const stock=Number(prompt("Stock quantity in Month "+month+" (items)",current().stock[name]||0));if(!Number.isInteger(stock)||stock<0){alert("Enter a stock quantity of 0 or more.");return}
+ const clean=nextName.trim();if(!clean|| (clean!==name&&product(clean))){alert("Choose a non-empty name that isn't already in use.");return}
+ p.name=clean;p.type=type.trim()||"Other";p.portionsPerItem=portions;
+ months.forEach(m=>{m.entries.forEach(a=>a.forEach((x,i)=>{if(x===name)a[i]=clean}));if(Object.prototype.hasOwnProperty.call(m.stock,name)){m.stock[clean]=m.stock[name];delete m.stock[name]}});
+ current().stock[clean]=stock;save();render();
+}
+function removeProduct(name){
+ if(!confirm("Remove "+name+" from the product list? Existing day logs will be kept."))return;
+ const p=product(name);if(p)p.active=false;save();render();
+}
+function carryForward(){
+ if(month===3)return;
+ const from=month,to=month+1;
+ if(!confirm("Copy the unused stock from Month "+from+" into Month "+to+"? This replaces Month "+to+"'s current stock quantities. Its daily log will be left untouched."))return;
+ catalog.filter(p=>p.active).forEach(p=>months[to-1].stock[p.name]=stockLeft(p.name,from));
+ month=to;day=1;save();render();
 }
 function render(){
- const list=entries[day-1],count=list.reduce((a,n)=>a+qty(n),0),sum=total();
- $("dayTitle").textContent="Day "+day+" of 28";$("dayRange").value=day;$("prev").disabled=day===1;$("next").disabled=day===28;$("dayCount").textContent=count+" / 7 portions";
+ const entries=current().entries,list=entries[day-1],count=list.reduce((a,n)=>a+portionCount(n),0),sum=total();
+ $("dayTitle").textContent="Day "+day+" of 28 · Month "+month;$("dayRange").value=day;$("prev").disabled=day===1;$("next").disabled=day===28;$("dayCount").textContent=count+" / 7 portions";
  $("slots").replaceChildren();
- list.forEach((name,i)=>{const row=document.createElement("div");row.className="slot";const sel=document.createElement("select");const empty=document.createElement("option");empty.value="";empty.textContent="Choose product";sel.append(empty);products.forEach(p=>{const o=document.createElement("option");o.value=p[0];o.textContent=p[0];sel.append(o)});sel.value=name;sel.onchange=()=>{list[i]=sel.value;if(!sel.value)list.splice(i,1);save();render()};const q=document.createElement("small");q.textContent=name?qty(name)+" portion"+(qty(name)>1?"s":""):"";const del=document.createElement("button");del.textContent="×";del.onclick=()=>{list.splice(i,1);save();render()};row.append(sel,q,del);$("slots").append(row)});
- const complete=entries.filter(a=>a.reduce((s,n)=>s+qty(n),0)===7).length;$("logged").textContent=sum+"/196";$("days").textContent=complete+"/28";$("remaining").textContent=totalStock-sum;const pct=Math.min(100,sum/target*100);$("progress").style.width=pct+"%";$("progressText").textContent=Math.round(pct)+"% of monthly target";
- $("stock").replaceChildren();products.forEach(p=>{const left=p[1]-used(p[0]),r=document.createElement("div"),n=document.createElement("span"),v=document.createElement("b"),bar=document.createElement("div"),fill=document.createElement("div");r.className="stockrow";n.textContent=p[0];v.textContent=p[0].includes("Bar")?(left/2)+" bars ("+left+" portions)":left+" portions";r.append(n,v);bar.className="stockbar";fill.style.width=Math.max(0,left/p[1]*100)+"%";bar.append(fill);$("stock").append(r,bar)});
+ list.forEach((name,i)=>{const row=document.createElement("div");row.className="slot";const sel=document.createElement("select");const empty=document.createElement("option");empty.value="";empty.textContent="Choose product";sel.append(empty);catalog.filter(p=>p.active||p.name===name).forEach(p=>{const o=document.createElement("option");o.value=p.name;o.textContent=p.name;sel.append(o)});sel.value=name;sel.onchange=()=>{list[i]=sel.value;if(!sel.value)list.splice(i,1);save();render()};const q=document.createElement("small");q.textContent=name?portionCount(name)+" portion"+(portionCount(name)>1?"s":""):"";const del=document.createElement("button");del.textContent="×";del.onclick=()=>{list.splice(i,1);save();render()};row.append(sel,q,del);$("slots").append(row)});
+ const complete=entries.filter(a=>a.reduce((s,n)=>s+portionCount(n),0)===7).length;
+ $("logged").textContent=sum+"/196";$("days").textContent=complete+"/28";
+ const remaining=catalog.filter(p=>p.active).reduce((n,p)=>n+stockLeft(p.name)*p.portionsPerItem,0);
+ $("remaining").textContent=remaining;
+ const pct=Math.min(100,sum/target*100);$("progress").style.width=pct+"%";$("progressText").textContent=Math.round(pct)+"% of monthly target";
+ renderInventory();
 }
-$("prev").onclick=()=>{day=Math.max(1,day-1);render()};$("next").onclick=()=>{day=Math.min(28,day+1);render()};$("dayRange").oninput=e=>{day=+e.target.value;render()};$("randomPlan").onclick=makeRandomPlan;$("addSlot").onclick=()=>{if(entries[day-1].length>=7){alert("Maximum seven product entries. Remove or change one first.");return}entries[day-1].push("");save();render()};$("reset").onclick=()=>{if(confirm("Reset all 28 days?")){entries=Array.from({length:28},()=>[]);save();render()}};render();
-if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+document.querySelectorAll(".monthBtn").forEach(b=>b.onclick=()=>{month=+b.dataset.month;day=1;render()});
+$("carryForward").onclick=carryForward;
+$("saveProduct").onclick=()=>{
+ const name=$("productName").value.trim(),type=$("productType").value,portions=Number($("productPortions").value),stock=Number($("productStock").value);
+ if(!name||product(name)||!Number.isInteger(portions)||portions<1||!Number.isInteger(stock)||stock<0){alert("Enter a unique product name, a whole-number portion value of at least 1, and a stock quantity of 0 or more.");return}
+ catalog.push({name,type,portionsPerItem:portions,active:true});current().stock[name]=stock;
+ $("productName").value="";$("productStock").value="0";save();render();
+};
+$("prev").onclick=()=>{day=Math.max(1,day-1);render()};$("next").onclick=()=>{day=Math.min(28,day+1);render()};$("dayRange").oninput=e=>{day=+e.target.value;render()};$("randomPlan").onclick=makeRandomPlan;
+$("addSlot").onclick=()=>{if(current().entries[day-1].length>=7){alert("Maximum seven product entries. Remove or change one first.");return}current().entries[day-1].push("");save();render()};
+$("reset").onclick=()=>{if(confirm("Reset all three months of logged products? Inventory quantities will be kept.")){months.forEach(m=>m.entries=Array.from({length:28},()=>[]));save();render()}};
+render();
+if("serviceWorker"in navigator) addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script>addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 </script></body></html>
