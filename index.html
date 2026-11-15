@@ -59,9 +59,36 @@ OneSignalDeferred.push(async function(OneSignal) {
 <style>
 :root{color-scheme:light dark;--bg:#f4f6f3;--card:#fff;--ink:#1d2923;--muted:#647168;--line:#e1e8e1;--green:#26734d;--soft:#e6f3ea;--soft-ink:#26734d;--note:#fff4d9;--note-ink:#58451c}*{box-sizing:border-box} @media(prefers-color-scheme:dark){:root{--bg:#101512;--card:#1c2420;--ink:#edf4ef;--muted:#a5b2a9;--line:#35423a;--green:#63b783;--soft:#263d30;--soft-ink:#b9edca;--note:#3b3422;--note-ink:#f4e5b7}.stat,.panel{background:#1c2420;color:#edf4ef}.stat strong,.panel h2,.nav strong{color:#edf4ef}.nav button,button,select{background:#26312b;color:#edf4ef;color-scheme:dark}.dayselect{color-scheme:dark}.progress{background:#303b34}.stockbar{background:#303b34}.stockbar div{background:#63b783}.note{background:var(--note);border-color:#65542f;color:var(--note-ink)}a{color:#8ed6a8}button,select{background:#26312b;color:var(--ink);border-color:var(--line)}.primary{background:var(--green);color:#07140c}.nav button:disabled{opacity:.4}#randomPlan{background:var(--soft)!important;color:var(--soft-ink)!important}#reset{background:#26312b;color:var(--ink)}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,sans-serif}header{background:#172b25;color:white;padding:24px 18px;border-radius:0 0 24px 24px}h1{margin:6px 0;font-size:27px}header p{margin:0;color:#d5e3d9;font-size:14px}main{max-width:720px;margin:auto;padding:16px 14px 36px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat,.panel{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}.stat strong{display:block;font-size:22px}.stat span,.muted{font-size:12px;color:var(--muted)}.progress{height:8px;background:#e8eee8;border-radius:20px;margin:12px 0 4px;overflow:hidden}.progress div{height:100%;background:var(--green);width:0}.panel{margin-top:15px}h2{font-size:18px;margin:0 0 12px}.nav{display:flex;gap:8px;align-items:center}.nav button,button,select{padding:10px;border:1px solid var(--line);background:var(--card);border-radius:10px;font-size:15px;color:var(--ink)}.nav strong{flex:1;text-align:center}.dayselect{width:100%;margin:12px 0;accent-color:var(--green)}.daycount{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:8px 0}.slot{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.slot select{width:100%;min-width:0;font-size:13px}.slot small{white-space:nowrap;color:var(--muted)}.slot button{padding:6px 10px;color:#923d3d}.primary{width:100%;background:var(--green);color:white;border:0;margin-top:10px}.stockrow{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin:12px 0 5px}.stockbar{height:6px;background:#edf1ed;border-radius:10px;overflow:hidden}.stockbar div{height:100%;background:#5b9b73}.note{background:#fff4d9;border:1px solid #f0dfb3;border-radius:12px;padding:12px;font-size:13px;color:#58451c;margin-top:16px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:16px}
 .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.formgrid label{font-size:12px;color:var(--muted)}.formgrid input,.formgrid select{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font-size:15px}.productrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}.productrow button{padding:6px 8px}.monthBtn.active{background:var(--green);color:white;border-color:var(--green)}@media(max-width:420px){.formgrid{grid-template-columns:1fr}}\n.inventory-panel>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px}.inventory-panel>summary::-webkit-details-marker{display:none}.inventory-panel>summary h2{margin:0}.inventory-hint{font-size:13px;color:var(--muted);text-align:right}.inventory-content{padding-top:14px}.inventory-panel[open]>summary{padding-bottom:10px;border-bottom:1px solid var(--line)}
-</style></head><body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Month 1</h1><p>Your portions, daily checklist and remaining stock.</p></header><main>
-<div class="stats"><div class="stat"><strong id="logged">0/196</strong><span>Portions logged</span></div><div class="stat"><strong id="days">0/28</strong><span>Days completed</span></div><div class="stat"><strong id="remaining">206</strong><span>Stock remaining</span></div></div><div class="progress"><div id="progress"></div></div><div class="muted" id="progressText">0% of monthly target</div>
-<details class="panel inventory-panel"><summary><h2>Monthly inventory</h2><span class="inventory-hint">Manage months, products and stock · Tap to expand</span></summary><div class="inventory-content">
+
+.app-page{display:none}.app-page.active{display:block}
+.app-tabs{position:fixed;z-index:100;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--card) 94%,transparent);border-top:1px solid var(--line);backdrop-filter:blur(18px)}
+.app-tabs .tab{border:0;background:transparent;color:var(--muted);padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:20px;border-radius:10px}
+.app-tabs .tab small{font-size:10px;font-weight:600}.app-tabs .tab.active{color:var(--green);background:var(--soft)}
+main{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+.app-page>.panel:first-child{margin-top:4px}
+<body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Month 1</h1><p>Your portions, daily checklist and remaining stock.</p></header><main>
+<div class="app-tabs" role="navigation" aria-label="Main navigation">
+<button class="tab active" data-page="today"><span>◷</span><small>Today</small></button>
+<button class="tab" data-page="drinks"><span>♧</span><small>Drinks</small></button>
+<button class="tab" data-page="stock"><span>▤</span><small>Stock</small></button>
+<button class="tab" data-page="resources"><span>⌂</span><small>Resources</small></button>
+<button class="tab" data-page="settings"><span>⚙</span><small>More</small></button>
+</div>
+<section class="app-page active" id="page-today"><div class="stats"><div class="stat"><strong id="logged">0/196</strong><span>Portions logged</span></div><div class="stat"><strong id="days">0/28</strong><span>Days completed</span></div><div class="stat"><strong id="remaining">206</strong><span>Stock remaining</span></div></div><div class="progress"><div id="progress"></div></div><div class="muted" id="progressText">0% of monthly target</div>
+<section class="panel"><h2>Daily tracker</h2><div class="nav"><button id="prev">‹</button><strong id="dayTitle">Day 1 of 28</strong><button id="next">›</button></div><input id="dayRange" class="dayselect" type="range" min="1" max="28" value="1"><div class="daycount"><span>Choose what you consumed</span><b id="dayCount">0 / 7 portions</b></div><div id="slots"></div><button class="primary" id="addSlot">+ Add a product</button><button class="primary" id="randomPlan" style="background:#e6f3ea;color:#26734d">✨ Create random 7-portion plan</button><p class="muted">Random plans lead with a café-style shake, rotate flavours to keep things varied, and only occasionally include Egg Omelette (no more than twice in a seven-day block). Bars count as two portions, with a maximum of one bar per day. Edit the suggestions to suit your day.</p></section>
+</section>
+<section class="app-page" id="page-drinks"><section class="panel"><h2>Drinks to enjoy</h2>
+<p class="muted">A handy reminder from your programme guidance.</p>
+<h3 style="font-size:15px;margin:14px 0 6px;color:#26734d">Still cold drinks</h3>
+<ul><li>Plain water</li><li>Sugar-free flavoured waters</li><li>No added-sugar squash</li><li>Homemade sugar-free ice lollies</li></ul>
+<h3 style="font-size:15px;margin:14px 0 6px;color:#26734d">Fizzy cold drinks</h3>
+<ul><li>Sparkling water</li><li>Sugar-free flavoured sparkling waters</li><li>Diet fizzy soft drinks</li><li>‘Zero’ fizzy soft drinks</li></ul>
+<h3 style="font-size:15px;margin:14px 0 6px;color:#26734d">Hot drinks</h3>
+<ul><li>Filter or instant coffee</li><li>Tea, herbal teas and spiced teas, e.g. unsweetened masala chai</li><li>Bovril</li><li>Hot bouillon</li><li>Milk/milk alternatives — from 50 ml allowance (excluding full-fat milk)</li></ul>
+<p class="muted">Use the allowances and guidance given by your own coach if anything differs.</p>
+</section>
+</section>
+<section class="app-page" id="page-stock"><details class="panel inventory-panel"><summary><h2>Monthly inventory</h2><span class="inventory-hint">Manage months, products and stock · Tap to expand</span></summary><div class="inventory-content">
 <p class="muted">Each month has its own stock and 28-day log. Choose a month, add or edit products, and carry unused stock into the next month when you're ready.</p>
 <div class="nav" style="margin-bottom:10px"><button class="monthBtn" data-month="1">Month 1</button><button class="monthBtn" data-month="2">Month 2</button><button class="monthBtn" data-month="3">Month 3</button></div>
 <div class="nav" style="margin-bottom:10px"><strong id="monthHeading">Month 1 inventory</strong><button id="carryForward">Carry stock forward →</button></div>
@@ -78,26 +105,17 @@ OneSignalDeferred.push(async function(OneSignal) {
 <button class="primary" id="saveProduct">Add product to this month</button>
 <div id="productList" style="margin-top:12px"></div>
 </details></div></details>
-<section class="panel"><h2>Daily tracker</h2><div class="nav"><button id="prev">‹</button><strong id="dayTitle">Day 1 of 28</strong><button id="next">›</button></div><input id="dayRange" class="dayselect" type="range" min="1" max="28" value="1"><div class="daycount"><span>Choose what you consumed</span><b id="dayCount">0 / 7 portions</b></div><div id="slots"></div><button class="primary" id="addSlot">+ Add a product</button><button class="primary" id="randomPlan" style="background:#e6f3ea;color:#26734d">✨ Create random 7-portion plan</button><p class="muted">Random plans lead with a café-style shake, rotate flavours to keep things varied, and only occasionally include Egg Omelette (no more than twice in a seven-day block). Bars count as two portions, with a maximum of one bar per day. Edit the suggestions to suit your day.</p></section>
-<section class="panel"><h2>Drinks to enjoy</h2>
-<p class="muted">A handy reminder from your programme guidance.</p>
-<h3 style="font-size:15px;margin:14px 0 6px;color:#26734d">Still cold drinks</h3>
-<ul><li>Plain water</li><li>Sugar-free flavoured waters</li><li>No added-sugar squash</li><li>Homemade sugar-free ice lollies</li></ul>
-<h3 style="font-size:15px;margin:14px 0 6px;color:#26734d">Fizzy cold drinks</h3>
-<ul><li>Sparkling water</li><li>Sugar-free flavoured sparkling waters</li><li>Diet fizzy soft drinks</li><li>‘Zero’ fizzy soft drinks</li></ul>
-<h3 style="font-size:15px;margin:14px 0 6px;color:#26734d">Hot drinks</h3>
-<ul><li>Filter or instant coffee</li><li>Tea, herbal teas and spiced teas, e.g. unsweetened masala chai</li><li>Bovril</li><li>Hot bouillon</li><li>Milk/milk alternatives — from 50 ml allowance (excluding full-fat milk)</li></ul>
-<p class="muted">Use the allowances and guidance given by your own coach if anything differs.</p>
 </section>
-<section class="panel"><h2>Programme links</h2>
+<section class="app-page" id="page-resources"><section class="panel"><h2>Programme links</h2>
 <p><a href="https://momentanewcastle.com/nhs-type-2-diabetes-path-to-remission/" target="_blank" rel="noopener">Momenta — participant resources</a></p>
 <p><a href="https://help.momenta.livahealth.com/en/category/eb2b47" target="_blank" rel="noopener">Momenta / Liva — Help Centre</a></p>
 <p><a href="https://apps.apple.com/gb/app/liva/id1216142622" target="_blank" rel="noopener">Liva app — App Store</a></p>
 <p class="muted">The Liva link opens its App Store page; if it is already installed, use the Open button there. A direct jump into your personal app account needs an app-specific sign-in/deep link, which this tracker cannot safely guess.</p>
 </section>
-<section class="panel"><h2>Starting inventory</h2><p class="muted">146 non-bar portions + 60 bar portions = 206 total. Monthly target: 196. Potential surplus: 10 portions.</p></section>
+</section>
+<section class="app-page" id="page-settings"><section class="panel"><h2>Starting inventory</h2><p class="muted">146 non-bar portions + 60 bar portions = 206 total. Monthly target: 196. Potential surplus: 10 portions.</p></section>
 <div class="note"><b>Programme reminder:</b> This is a stock and logging aid, not a prescribed meal plan. Follow your coach's instructions for daily portions, product combinations, bar frequency, hydration and diabetes/medication monitoring.</div><button id="reset" style="width:100%;margin-top:12px">Reset all logged products</button><section class="panel"><h2>Reminders</h2><p class="muted">Enable push notifications on this device to receive your programme reminders.</p><button class="primary" id="enableNotifications" disabled onclick="window.tdrEnableNotifications&&window.tdrEnableNotifications()">Enable notifications</button><p class="muted" id="notificationStatus">Loading notification service…</p><p class="muted">On iPhone, open this tracker from its Home Screen icon and allow notifications when prompted.</p></section>
-<div class="footer">Progress is saved in this browser on this device. It does not sync between devices.</div></main>
+<section class="panel"><h2>Reminders</h2><p class="muted">Enable push notifications on this device to receive your programme reminders.</p><button class="primary" id="enableNotifications" disabled onclick="window.tdrEnableNotifications&&window.tdrEnableNotifications()">Enable notifications</button><p class="muted" id="notificationStatus">Loading notification service…</p><p class="muted">On iPhone, open this tracker from its Home Screen icon and allow notifications when prompted.</p></section><div class="footer">Progress is saved in this browser on this device. It does not sync between devices.</div></section></main>
 <script>
 const initialProducts=[
  ["Chocolate Shake","Shake",1,12],["Chocolate Mint Shake","Shake",1,10],["Caffe Latte Shake","Shake",1,10],["Chai Latte Shake","Shake",1,12],["Vanilla Shake","Shake",1,10],["Blueberry Raspberry","Shake",1,12],["Strawberry","Shake",1,10],["Egg Omelette","Meal",1,10],["Lemon Pudding","Pudding",1,12],["Chocolate Pudding","Pudding",1,12],["Mango Vanilla","Shake",1,12],["Vanilla Red Berries","Shake",1,12],["Apple Cinnamon","Pudding",1,12],["Chocolate Bar","Bar",2,15],["Cookie Crunch Bar","Bar",2,15]
@@ -222,6 +240,11 @@ $("prev").onclick=()=>{day=Math.max(1,day-1);render()};$("next").onclick=()=>{da
 $("addSlot").onclick=()=>{if(current().entries[day-1].length>=7){alert("Maximum seven product entries. Remove or change one first.");return}current().entries[day-1].push("");save();render()};
 $("reset").onclick=()=>{if(confirm("Reset all three months of logged products? Inventory quantities will be kept.")){months.forEach(m=>m.entries=Array.from({length:28},()=>[]));save();render()}};
 render();
+function showPage(name){
+ document.querySelectorAll(".app-page").forEach(p=>p.classList.toggle("active",p.id==="page-"+name));
+ document.querySelectorAll(".app-tabs .tab").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
+ window.scrollTo({top:0,behavior:"instant"});
+}
+document.querySelectorAll(".app-tabs .tab").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 if("serviceWorker"in navigator) addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-</script>addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 </script></body></html>
