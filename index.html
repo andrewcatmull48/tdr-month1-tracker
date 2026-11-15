@@ -215,6 +215,24 @@ function carryForward(){
  catalog.filter(p=>p.active).forEach(p=>months[to-1].stock[p.name]=stockLeft(p.name,from));
  month=to;day=1;save();render();
 }
+function renderInsights(){
+ const entries=current().entries;
+ const done=entries.filter(a=>a.reduce((s,n)=>s+portionCount(n),0)>=dailyTarget).length;
+ $("insightDays").textContent=done+"/"+targetDays;
+ let streak=0;
+ for(let i=day-1;i>=0;i--){if(entries[i].reduce((s,n)=>s+portionCount(n),0)>=dailyTarget)streak++;else break}
+ $("insightStreak").textContent=streak;
+ const names=[...new Set(entries.flat().filter(Boolean))];
+ $("insightVariety").textContent=names.length;
+ $("weeklyInsights").replaceChildren();
+ for(let w=0;w<4;w++){
+  const n=entries.slice(w*7,w*7+7).filter(a=>a.reduce((s,x)=>s+portionCount(x),0)>=dailyTarget).length;
+  const p=document.createElement("p");p.textContent="Week "+(w+1)+": "+n+"/7 complete days";$("weeklyInsights").append(p);
+ }
+ $("varietyInsights").textContent=names.length?names.join(", "):"Log products to see your variety.";
+ const expired=catalog.filter(p=>p.active&&p.expiry&&p.expiry<new Date().toISOString().slice(0,10));
+ $("stockForecast").textContent=expired.length?"Check best-before dates: "+expired.map(p=>p.name+" ("+p.expiry+")").join(", "):"No expired dates recorded. Keep stock quantities up to date for a useful forecast.";
+}
 function render(){
  const entries=current().entries,list=entries[day-1],count=list.reduce((a,n)=>a+portionCount(n),0),sum=total();
  $("dayTitle").textContent="Day "+day+" of 28 · Month "+month;$("dayRange").value=day;$("prev").disabled=day===1;$("next").disabled=day===28;$("dayCount").textContent=count+" / "+dailyTarget+" portions";
