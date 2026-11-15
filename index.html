@@ -66,7 +66,7 @@ OneSignalDeferred.push(async function(OneSignal) {
 <div class="nav" style="margin-bottom:10px"><strong id="monthHeading">Month 1 inventory</strong><button id="carryForward">Carry stock forward →</button></div>
 <div id="stock"></div>
 <details style="margin-top:14px"><summary><b>Manage products and stock</b></summary>
-<p class="muted">Add any product and set its type, how many programme portions one item provides, and how many items you have in this month's stock. These are tracking settings only — follow your coach for what counts as a portion.</p>
+<p class="muted">Add any product and set its type, how many programme portions one item provides, and how many items you have in this month's stock. These are tracking settings only — follow your coach for what counts as a portion. Nupo Diet (TDR) and One Meal are kept as separate product ranges; One Meal stock is not used in the TDR random planner.</p>
 <div class="formgrid">
 <label>Product name<input id="productName" placeholder="e.g. Lemon Pudding"></label>
 <label>Product range<select id="productLine"><option>Nupo Diet (TDR)</option><option>One Meal</option><option>Other</option></select></label>
@@ -204,7 +204,7 @@ function render(){
  list.forEach((name,i)=>{const row=document.createElement("div");row.className="slot";const sel=document.createElement("select");const empty=document.createElement("option");empty.value="";empty.textContent="Choose product";sel.append(empty);catalog.filter(p=>(p.active||p.name===name)&&p.line!=="One Meal").forEach(p=>{const o=document.createElement("option");o.value=p.name;o.textContent=p.name+" · "+p.line;sel.append(o)});sel.value=name;sel.onchange=()=>{list[i]=sel.value;if(!sel.value)list.splice(i,1);save();render()};const q=document.createElement("small");q.textContent=name?portionCount(name)+" portion"+(portionCount(name)>1?"s":""):"";const del=document.createElement("button");del.textContent="×";del.onclick=()=>{list.splice(i,1);save();render()};row.append(sel,q,del);$("slots").append(row)});
  const complete=entries.filter(a=>a.reduce((s,n)=>s+portionCount(n),0)===7).length;
  $("logged").textContent=sum+"/196";$("days").textContent=complete+"/28";
- const remaining=catalog.filter(p=>p.active).reduce((n,p)=>n+stockLeft(p.name)*p.portionsPerItem,0);
+ const remaining=catalog.filter(p=>p.active&&p.line!=="One Meal").reduce((n,p)=>n+stockLeft(p.name)*p.portionsPerItem,0);
  $("remaining").textContent=remaining;
  const pct=Math.min(100,sum/target*100);$("progress").style.width=pct+"%";$("progressText").textContent=Math.round(pct)+"% of monthly target";
  renderInventory();
