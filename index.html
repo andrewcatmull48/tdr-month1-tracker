@@ -244,7 +244,7 @@ $("makeAppleReminders").onclick=()=>{
 
  location.href=url;
 };
-function getFibreTimes(){try{const v=JSON.parse(localStorage.getItem("tdrFibreTimes"));if(Array.isArray(v)&&v.length===3&&v.every(t=>/^([01]\\d|2[0-3]):[0-5]\\d$/.test(t)))return v}catch(e){}return ["09:00","13:00","19:00"]}
+function getFibreTimes(){try{const v=JSON.parse(localStorage.getItem("tdrFibreTimes"));if(Array.isArray(v)&&v.length===3&&v.every(t=>/^([01]\d|2[0-3]):[0-5]\d$/.test(t)))return v}catch(e){}return ["09:00","13:00","19:00"]}
 function fibreReminderItems(dayOffset=0){
  const date=new Date();date.setHours(0,0,0,0);date.setDate(date.getDate()+dayOffset);
  return getFibreTimes().map(t=>{const [h,m]=t.split(":").map(Number),due=new Date(date);due.setHours(h,m,0,0);return {due,title:"Fibre supplement"}});
