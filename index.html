@@ -297,10 +297,10 @@ function localStamp(d){
 }
 $("makeAppleReminders").onclick=()=>{
  const items=reminderItems();
- if(!items.length){$("reminderStatus").textContent="Add products to this day's plan first, then create its reminders.";return;}
+ if(!items.length){alert("Add products to today's plan first.");return;}
  const payload=items.map(x=>localStamp(x.due)+" | "+x.title).join("\n");
  const url="shortcuts://run-shortcut?name="+encodeURIComponent("Create TDR Reminders")+"&input=text&text="+encodeURIComponent(payload);
- $("reminderStatus").textContent="Opening Shortcuts with "+items.length+" reminders for Day "+day+" only.";
+
  location.href=url;
 };
 
