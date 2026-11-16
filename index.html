@@ -302,11 +302,11 @@ $("exportReminderCalendar").onclick=()=>{
  const items=reminderItems();
  if(!items.length){$("reminderStatus").textContent="Add products to this day's plan first, then create its calendar backup.";return;}
  const stamp=d=>d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+"T"+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0")+"00";
- const esc=s=>s.replace(/\\\\/g,"\\\\\\\\").replace(/,/g,"\\\\,").replace(/;/g,"\\\\;").replace(/\\n/g,"\\\\n");
+ const esc=s=>s.replace(/\\/g,"\\\\").replace(/,/g,"\\,").replace(/;/g,"\\;").replace(/\n/g,"\\n");
  const lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//TDR Companion//Daily Reminders//EN","CALSCALE:GREGORIAN"];
  items.forEach((x,i)=>{lines.push("BEGIN:VEVENT","UID:tdr-"+Date.now()+"-"+i+"@tdr-companion","DTSTAMP:"+stamp(new Date()),"DTSTART:"+stamp(x.due),"SUMMARY:"+esc(x.title),"END:VEVENT")});
  lines.push("END:VCALENDAR");
- const blob=new Blob([lines.join("\\r\\n")],"text/calendar;charset=utf-8"),a=document.createElement("a");
+ const blob=new Blob([lines.join("\r\n")],"text/calendar;charset=utf-8"),a=document.createElement("a");
  a.href=URL.createObjectURL(blob);a.download="tdr-day-"+day+"-reminders.ics";a.click();URL.revokeObjectURL(a.href);
  $("reminderStatus").textContent="Calendar file created with "+items.length+" reminders for Day "+day+" only.";
 };
