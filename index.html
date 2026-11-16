@@ -73,7 +73,7 @@ main{padding-bottom:32px}
 <div class="topnav"><button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Open menu">☰ <span>Menu</span></button><nav id="appMenu" class="app-menu" hidden>
 <button data-page="today">Today</button><button data-page="drinks">Drinks</button><button data-page="stock">Stock</button><button data-page="resources">Resources</button><button data-page="insights">Insights</button><button data-page="settings">Settings</button><button data-page="help">Help</button></nav></div>
 <section class="app-page active" id="page-today"><div class="phase-progress"><div class="muted" id="progressText">0/84 days completed · 0% of first phase</div><div class="progress compact"><div id="progress"></div></div></div>
-<section class="panel"><h2>Daily tracker</h2><div class="nav"><button id="prev">‹</button><strong id="dayTitle">Day 1 of 28</strong><button id="next">›</button></div><input id="dayRange" class="dayselect" type="range" min="1" max="28" value="1"><div class="daycount"><span>Today's plan</span><b id="dayCount">0 / 7 portions planned</b></div><div class="daycount"><span>Consumed</span><b id="consumedCount">0 portions</b></div><div class="daycount"><span>Still to go</span><b id="leftCount">7 portions</b></div><div class="next-portion" id="nextPortion">Next portion: 09:00<small>Mark each portion as taken to advance your schedule.</small></div><div class="progress"><div id="dayProgress"></div></div><div id="slots"></div><div class="quick-add"><select id="quickProduct" aria-label="Choose a product to add"></select><button id="quickAdd">Add</button></div><button class="primary" id="addSlot">More options</button><button class="primary" id="makeAppleReminders">Add today's reminders to Apple Reminders</button><button class="primary" id="randomPlan" style="background:#e6f3ea;color:#26734d">✨ Create random 7-portion plan</button><p class="muted">Random plans lead with a café-style shake, rotate flavours to keep things varied, and only occasionally include Egg Omelette (no more than twice in a seven-day block). Bars count as two portions, with a maximum of one bar per day. Edit the suggestions to suit your day.</p></section>
+<section class="panel"><h2>Daily tracker</h2><div class="nav"><button id="prev">‹</button><strong id="dayTitle">Day 1 of 28</strong><button id="next">›</button></div><input id="dayRange" class="dayselect" type="range" min="1" max="28" value="1"><div class="daycount"><span>Today's plan</span><b id="dayCount">0 / 7 portions planned</b></div><div class="daycount"><span>Consumed</span><b id="consumedCount">0 portions</b></div><div class="daycount"><span>Still to go</span><b id="leftCount">7 portions</b></div><div class="next-portion" id="nextPortion">Next portion: 09:00<small>Mark each portion as taken to advance your schedule.</small></div><div class="progress"><div id="dayProgress"></div></div><div id="slots"></div><div class="quick-add"><select id="quickProduct" aria-label="Choose a product to add"></select><button id="quickAdd">Add</button></div><button class="primary" id="addSlot">More options</button><button class="primary" id="makeAppleReminders">Add today's reminders to Apple Reminders</button><button class="primary" id="makeTomorrowReminders">Add tomorrow's reminders to Apple Reminders</button><button class="primary" id="randomPlan" style="background:#e6f3ea;color:#26734d">✨ Create random 7-portion plan</button><p class="muted">Random plans lead with a café-style shake, rotate flavours to keep things varied, and only occasionally include Egg Omelette (no more than twice in a seven-day block). Bars count as two portions, with a maximum of one bar per day. Edit the suggestions to suit your day.</p></section>
 </section>
 <section class="panel" id="hydrationPanel"><h2>Hydration</h2><div style="display:flex;align-items:baseline;gap:6px"><strong id="waterAmount" style="font-size:28px">0</strong><span class="muted">/ 1,500 ml today</span></div><div class="progress"><div id="waterProgress"></div></div><div style="display:flex;gap:8px;margin-top:10px"><button id="water250" style="flex:1">+250 ml</button><button id="water500" style="flex:1">+500 ml</button><button id="waterUndo" aria-label="Undo last drink">Undo</button></div><p class="muted">A simple water tally. Adjust your fluid intake to your programme team's advice.</p></section>
 <section class="app-page" id="page-drinks"><section class="panel"><h2>Drinks to enjoy</h2>
@@ -275,8 +275,8 @@ renderWater();
 $("dailyTarget").value=7;$("dailyTarget").disabled=true;$("targetDays").value=targetDays;
 $("savePreferences").onclick=()=>{const d=7,t=Number($("targetDays").value);if(!Number.isInteger(t)||t<1||t>31){alert("Enter valid targets.");return}dailyTarget=7;targetDays=t;target=dailyTarget*t;save();render();$("preferenceStatus").textContent="Preferences saved."};
 
-function reminderItems(){
- const out=[],date=new Date();date.setHours(0,0,0,0);
+function reminderItems(dayOffset=0){
+ const out=[],date=new Date();date.setHours(0,0,0,0);date.setDate(date.getDate()+dayOffset);
  const entries=current().entries[day-1]||[];
  const times=current().scheduleTimes[day-1]||[];
  entries.forEach((name,i)=>{
@@ -298,6 +298,13 @@ $("makeAppleReminders").onclick=()=>{
  const payload=items.map(x=>localStamp(x.due)+" | "+x.title).join("\n");
  const url="shortcuts://run-shortcut?name="+encodeURIComponent("Create TDR Reminders")+"&input=text&text="+encodeURIComponent(payload);
 
+ location.href=url;
+};
+$("makeTomorrowReminders").onclick=()=>{
+ const items=reminderItems(1);
+ if(!items.length){alert("Add products to the selected day plan first.");return;}
+ const payload=items.map(x=>localStamp(x.due)+" | "+x.title).join("\n");
+ const url="shortcuts://run-shortcut?name="+encodeURIComponent("Create TDR Reminders")+"&input=text&text="+encodeURIComponent(payload);
  location.href=url;
 };
 
