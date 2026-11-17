@@ -13,7 +13,67 @@
 .app-tabs .tab small{font-size:10px;font-weight:600}.app-tabs .tab.active{color:var(--green);background:var(--soft)}
 main{padding-bottom:32px}
 .app-page>.panel:first-child{margin-top:4px}
-.nutrition-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.nutrition-grid label{font-size:12px;color:var(--muted)}.nutrition-grid input{display:block;width:100%;margin-top:4px;padding:9px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink)}.nutrition-section{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}.profile-card{padding:10px 0;border-bottom:1px solid var(--line)}@media(max-width:420px){.nutrition-grid{grid-template-columns:1fr}}</style></head><body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Programme Companion</h1><p>Your daily plan, progress, drinks and programme tools.</p></header><main>
+.nutrition-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.nutrition-grid label{font-size:12px;color:var(--muted)}.nutrition-grid input{display:block;width:100%;margin-top:4px;padding:9px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink)}.nutrition-section{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}.profile-card{padding:10px 0;border-bottom:1px solid var(--line)}@media(max-width:420px){.nutrition-grid{grid-template-columns:1fr}} 
+/* Nutrition review refresh */
+#page-nutrition{padding-bottom:24px}
+.nutrition-hero{background:linear-gradient(145deg,#17382c,#285d43);color:#fff;border-radius:20px;padding:22px 20px;margin:4px 0 14px;box-shadow:0 8px 24px #17382c18}
+.nutrition-kicker,.nutrition-eyebrow{font-size:10px;letter-spacing:.14em;font-weight:800;opacity:.72}
+.nutrition-hero h2{font-size:25px;margin:6px 0}
+.nutrition-hero p{font-size:13px;line-height:1.5;color:#dcebe1;margin:0;max-width:420px}
+.nutrition-privacy{display:flex;align-items:center;gap:7px;font-size:11px;color:#dcebe1;margin-top:16px}
+.privacy-dot{width:7px;height:7px;border-radius:50%;background:#9be0ad;display:inline-block}
+.nutrition-product-panel,.nutrition-compare-panel,.nutrition-source-panel{padding:17px}
+.nutrition-panel-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.nutrition-panel-heading h2{margin:3px 0 0;font-size:19px}
+.nutrition-eyebrow{color:var(--green);opacity:1}
+.nutrition-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--soft);color:var(--green);font-size:19px}
+.nutrition-select-label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:12px 0 5px}
+.nutrition-product-select,#nutritionReviewCategory{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--ink);font-size:15px}
+.nutrition-summary{margin-top:15px}
+.nutrition-product-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.nutrition-category-pill,.nutrition-source-pill{font-size:11px;font-weight:700;padding:5px 9px;border-radius:30px;background:var(--soft);color:var(--soft-ink)}
+.nutrition-source-pill{background:var(--bg);color:var(--muted);font-weight:600}
+.nutrition-macro-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.nutrition-macro{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 9px;min-width:0}
+.nutrition-macro strong{display:block;font-size:20px;line-height:1.2;letter-spacing:-.03em;overflow-wrap:anywhere}
+.nutrition-macro span{display:block;font-size:10px;color:var(--muted);margin-top:5px}
+.nutrition-macro.energy{background:var(--soft);border-color:transparent}
+.nutrition-macro.energy strong{color:var(--soft-ink)}
+.nutrition-micro-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.nutrition-micro-item{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:12px}
+.nutrition-micro-item span{color:var(--muted)}
+.nutrition-micro-item b{text-align:right}
+.nutrition-empty{background:var(--bg);border:1px dashed var(--line);border-radius:12px;padding:14px;color:var(--muted);font-size:13px}
+.nutrition-editor{border-top:1px solid var(--line);margin-top:16px;padding-top:13px}
+.nutrition-editor summary{display:flex;justify-content:space-between;align-items:center;cursor:pointer;list-style:none}
+.nutrition-editor summary::-webkit-details-marker{display:none}
+.nutrition-editor summary b,.nutrition-editor summary small{display:block}
+.nutrition-editor summary b{font-size:13px}
+.nutrition-editor summary small{font-size:11px;color:var(--muted);margin-top:3px}
+.editor-chevron{font-size:20px;color:var(--green)}
+.nutrition-editor[open] .editor-chevron{transform:rotate(45deg)}
+.nutrition-editor-body{padding-top:12px}
+.nutrition-editor-body .nutrition-section h3{font-size:13px;margin:0 0 9px}
+.nutrition-editor-body .nutrition-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.nutrition-editor-body .nutrition-grid input{font-size:13px;min-width:0}
+.nutrition-editor-body .primary{margin-top:14px}
+.nutrition-day-caption{font-size:12px;color:var(--muted);margin:-4px 0 12px}
+.nutrition-day-list{display:grid;gap:8px}
+.nutrition-day-product{padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.nutrition-day-product strong{font-size:13px}
+.nutrition-day-product small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.nutrition-totals{margin-top:14px}
+.nutrition-totals h3,.nutrition-micro-section h3{font-size:13px;margin:0 0 8px}
+.nutrition-total-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.nutrition-total{padding:10px;border-radius:10px;background:var(--soft)}
+.nutrition-total b{display:block;font-size:16px;color:var(--soft-ink)}
+.nutrition-total span{font-size:10px;color:var(--muted)}
+.nutrition-micro-section{margin-top:14px}
+.nutrition-source-panel p{font-size:12px;color:var(--muted);line-height:1.55}
+.nutrition-source-panel a{font-size:12px;font-weight:700}
+@media(max-width:380px){.nutrition-macro-grid{gap:5px}.nutrition-macro{padding:9px 7px}.nutrition-macro strong{font-size:18px}.nutrition-editor-body .nutrition-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){.nutrition-hero{background:linear-gradient(145deg,#172c22,#234a34)}.nutrition-macro.energy{background:#263d30}.nutrition-total{background:#263d30}.nutrition-total b{color:#b9edca}.nutrition-product-select,#nutritionReviewCategory{background:#202a24}}
+</style></head><body><header><div style="font-size:11px;letter-spacing:.12em;opacity:.75">28-DAY PROGRAMME COMPANION</div><h1>TDR Programme Companion</h1><p>Your daily plan, progress, drinks and programme tools.</p></header><main>
 <div class="topnav"><button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Open menu">☰ <span>Menu</span></button><nav id="appMenu" class="app-menu" hidden>
 <button data-page="today">Today</button><button data-page="drinks">Drinks</button><button data-page="stock">Stock</button><button data-page="nutrition">Review Nutrition</button><button data-page="resources">Resources</button><button data-page="insights">Insights</button><button data-page="settings">Settings</button><button data-page="help">Help</button></nav></div>
 <section class="app-page active" id="page-today"><div class="phase-progress"><div class="muted" id="progressText">0/84 days completed · 0% of first phase</div><div class="progress compact"><div id="progress"></div></div></div>
@@ -49,7 +109,39 @@ main{padding-bottom:32px}
 <div id="productList" style="margin-top:12px"></div>
 </details></div></details>
 </section>
-<section class="app-page" id="page-nutrition"><section class="panel"><h2>Review Nutrition</h2><p class="muted">Private to this browser on this device. Review full product profiles and compare products in the selected day’s plan.</p><label>Product profile<select id="nutritionReviewProduct"></select></label><label>Category<select id="nutritionReviewCategory"><option>Shake</option><option>Meal</option><option>Oatmeal</option><option>Bar</option><option>Dessert</option></select></label><div id="nutritionProfile"></div><div id="nutritionEditInputs"></div><button class="primary" id="saveNutritionEdit">Save nutrition changes</button></section><section class="panel"><h2>Selected day comparison</h2><p class="muted" id="nutritionDayLabel"></p><div id="nutritionComparison"></div></section><section class="panel"><h2>Catalogue source</h2><p><a href="https://nupopartner.com/products/momenta-reboot" target="_blank" rel="noopener">Momenta REBOOT product page</a></p><p class="muted">Per-serving figures shown here were supplied from the manufacturer catalogue. Six- and seven-serving daily figures were not included in this data handoff, so they have not been invented. Spiced Mash, bars and desserts remain blank until their tables are supplied. Figures are not independently verified.</p></section></section>
+<section class="app-page" id="page-nutrition">
+<section class="nutrition-hero">
+ <div class="nutrition-kicker">YOUR PRODUCT LIBRARY</div>
+ <h2>Nutrition review</h2>
+ <p>Explore the information recorded for each product, then compare it with the plan for your selected day.</p>
+ <div class="nutrition-privacy"><span class="privacy-dot"></span> Saved privately in this browser on this device</div>
+</section>
+<section class="panel nutrition-product-panel">
+ <div class="nutrition-panel-heading"><div><span class="nutrition-eyebrow">PRODUCT PROFILE</span><h2>Explore a product</h2></div><span class="nutrition-icon">◉</span></div>
+ <label class="nutrition-select-label" for="nutritionReviewProduct">Choose a product</label>
+ <select id="nutritionReviewProduct" class="nutrition-product-select"></select>
+ <div id="nutritionProfile"></div>
+ <details class="nutrition-editor">
+  <summary><span><b>Edit nutrition details</b><small>Update the category, macros, vitamins or minerals</small></span><span class="editor-chevron">＋</span></summary>
+  <div class="nutrition-editor-body">
+   <label class="nutrition-select-label" for="nutritionReviewCategory">Product category</label>
+   <select id="nutritionReviewCategory"><option>Shake</option><option>Meal</option><option>Oatmeal</option><option>Bar</option><option>Dessert</option></select>
+   <div id="nutritionEditInputs"></div>
+   <button class="primary" id="saveNutritionEdit">Save nutrition changes</button>
+  </div>
+ </details>
+</section>
+<section class="panel nutrition-compare-panel">
+ <div class="nutrition-panel-heading"><div><span class="nutrition-eyebrow">DAY BY DAY</span><h2>Your plan comparison</h2></div><span class="nutrition-icon">▤</span></div>
+ <p class="muted" id="nutritionDayLabel"></p>
+ <div id="nutritionComparison"></div>
+</section>
+<section class="panel nutrition-source-panel">
+ <div class="nutrition-panel-heading"><div><span class="nutrition-eyebrow">DATA NOTES</span><h2>About these figures</h2></div></div>
+ <p>Per-serving figures shown here were supplied from the manufacturer catalogue. Six- and seven-serving daily figures were not included in the data handoff, so they have not been calculated or invented. Spiced Mash, bars and desserts remain blank until their tables are supplied. Figures are not independently verified.</p>
+ <a href="https://nupopartner.com/products/momenta-reboot" target="_blank" rel="noopener">View Momenta REBOOT catalogue ↗</a>
+</section>
+</section>
 <section class="app-page" id="page-resources"><section class="panel"><h2>Programme links</h2>
 <p><a href="https://momentanewcastle.com/nhs-type-2-diabetes-path-to-remission/" target="_blank" rel="noopener">Momenta — participant resources</a></p>
 <p><a href="https://help.momenta.livahealth.com/en/category/eb2b47" target="_blank" rel="noopener">Momenta / Liva — Help Centre</a></p>
@@ -153,7 +245,73 @@ function makeRandomPlan(){
 function renderNutritionInputs(hostId,p=null){const host=$(hostId);host.replaceChildren();const n=p?.nutrition||blankNutrition(),g=document.createElement("div");g.className="nutrition-grid";nutritionFieldKeys.forEach((key,i)=>{const l=document.createElement("label");l.textContent=nutritionLabels[i];const x=document.createElement("input");x.type="number";x.step="any";x.min="0";x.dataset.nkey=key;x.value=n[key]??"";l.append(x);g.append(l)});host.append(g);[[ "Vitamins",vitaminNames,"vitamins"],["Minerals",mineralNames,"minerals"]].forEach(([title,names,key])=>{const sec=document.createElement("div");sec.className="nutrition-section";const h=document.createElement("h3");h.textContent=title;sec.append(h);const grid=document.createElement("div");grid.className="nutrition-grid";names.forEach(name=>{const l=document.createElement("label");l.textContent=name+" (amount)";const x=document.createElement("input");x.type="text";x.placeholder="Amount and unit";x.dataset.group=key;x.dataset.nkey=name;x.value=n[key]?.[name]??"";l.append(x);grid.append(l)});sec.append(grid);host.append(sec)})}
 function readNutrition(hostId){const n=blankNutrition();$(hostId).querySelectorAll("[data-nkey]").forEach(x=>{if(x.dataset.group){if(x.value.trim())n[x.dataset.group][x.dataset.nkey]=x.value.trim()}else n[x.dataset.nkey]=x.value.trim()});return n}
 function formatNutrition(p){const n=p.nutrition||blankNutrition(),out=[];nutritionFieldKeys.forEach((key,i)=>{if(n[key]!=="")out.push(nutritionLabels[i]+": "+n[key])});["vitamins","minerals"].forEach(k=>Object.entries(n[k]||{}).forEach(([name,v])=>{if(v!=="")out.push(name+": "+v)}));return out.length?out.join(" · "):"No verified values entered."}
-function renderNutrition(){const preset=$("nutritionPreset"),oldPreset=preset.value;preset.replaceChildren(new Option("Choose a Momenta REBOOT product",""));momenteRebootProducts.forEach(([name])=>preset.add(new Option(name,name)));preset.value=oldPreset;const sel=$("nutritionReviewProduct"),old=sel.value;sel.replaceChildren();catalog.filter(p=>p.active).forEach(p=>sel.add(new Option(p.name,p.name)));sel.value=product(old)?old:(sel.options[0]?.value||"");const p=product(sel.value);$("nutritionProfile").textContent=p?((p.category||"Category not set")+" · "+formatNutrition(p)+" · "+(p.verificationStatus||"Manually entered; source not specified")):"No products";renderNutritionInputs("nutritionEditInputs",p);$("nutritionReviewCategory").value=p?.category||"Shake";const counts={};current().entries[day-1].filter(Boolean).forEach(n=>counts[n]=(counts[n]||0)+1);const totals={},lines=[];const specs=[...nutritionFieldKeys.map((k,i)=>({group:"",key:k,label:nutritionLabels[i],unit:["g","kcal","g","g","g","g"][i]})),...vitaminNames.map(k=>({group:"vitamins",key:k,label:k})),...mineralNames.map(k=>({group:"minerals",key:k,label:k}))];Object.entries(counts).forEach(([name,count])=>{const item=product(name),n=item?.nutrition||{};lines.push(name+" × "+count+" — "+(item?formatNutrition(item):""));specs.forEach(spec=>{const raw=spec.group?n[spec.group]?.[spec.key]:n[spec.key];const value=typeof raw==="number"?raw:parseFloat(String(raw||""));if(raw!==""&&raw!=null&&Number.isFinite(value)){const unit=spec.unit||String(raw).match(/[a-zA-Zµ%]+$/)?.[0]||"";const id=spec.label+"|"+unit;totals[id]=(totals[id]||0)+value*count}})});const agg=Object.entries(totals).map(([id,total])=>{const [label,unit]=id.split("|");return label+": "+total.toFixed(2)+(unit?" "+unit:"")});$("nutritionDayLabel").textContent="Day "+day+" · Month "+month;$("nutritionComparison").textContent=(lines.join(" | ")||"No products selected for this day.")+(agg.length?" | Combined per-day values: "+agg.join(" · "):" | Combined values appear when numeric product values are entered.")}
+function renderNutrition(){
+ const preset=$("nutritionPreset"),oldPreset=preset.value;
+ preset.replaceChildren(new Option("Choose a Momenta REBOOT product",""));
+ momenteRebootProducts.forEach(([name])=>preset.add(new Option(name,name)));
+ preset.value=oldPreset;
+ const sel=$("nutritionReviewProduct"),old=sel.value;
+ sel.replaceChildren();
+ catalog.filter(p=>p.active).forEach(p=>sel.add(new Option(p.name,p.name)));
+ sel.value=product(old)?old:(sel.options[0]?.value||"");
+ const p=product(sel.value),profile=$("nutritionProfile");
+ profile.replaceChildren();
+ if(p){
+  const wrap=document.createElement("div");wrap.className="nutrition-summary";
+  const meta=document.createElement("div");meta.className="nutrition-product-meta";
+  const category=document.createElement("span");category.className="nutrition-category-pill";category.textContent=p.category||"Category not set";
+  const source=document.createElement("span");source.className="nutrition-source-pill";source.textContent=p.verificationStatus||"Source not specified";
+  meta.append(category,source);wrap.append(meta);
+  const n=p.nutrition||blankNutrition(),grid=document.createElement("div");grid.className="nutrition-macro-grid";
+  const macroSpecs=[["energy","Energy","kcal"],["protein","Protein","g"],["carbohydrates","Carbs","g"],["fat","Fat","g"],["fibre","Fibre","g"],["servingWeight","Serving","g"]];
+  macroSpecs.forEach(([key,label,unit])=>{const card=document.createElement("div");card.className="nutrition-macro"+(key==="energy"?" energy":"");const value=document.createElement("strong");const raw=n[key];value.textContent=raw!==""&&raw!=null?String(raw):"—";const caption=document.createElement("span");caption.textContent=label+(raw!==""&&raw!=null?" · "+unit:"");card.append(value,caption);grid.append(card)});
+  wrap.append(grid);
+  [["Vitamins",n.vitamins||{}],["Minerals",n.minerals||{}]].forEach(([title,values])=>{
+   const entries=Object.entries(values).filter(([,v])=>v!==""&&v!=null);
+   const section=document.createElement("div");section.className="nutrition-micro-section";
+   const heading=document.createElement("h3");heading.textContent=title+" · "+entries.length+" recorded";section.append(heading);
+   if(entries.length){const list=document.createElement("div");list.className="nutrition-micro-grid";entries.forEach(([name,value])=>{const item=document.createElement("div");item.className="nutrition-micro-item";const label=document.createElement("span"),amount=document.createElement("b");label.textContent=name;amount.textContent=value;item.append(label,amount);list.append(item)});section.append(list)}
+   else{const empty=document.createElement("div");empty.className="nutrition-empty";empty.textContent="No "+title.toLowerCase()+" values have been entered for this product.";section.append(empty)}
+   wrap.append(section);
+  });
+  profile.append(wrap);
+ }else{const empty=document.createElement("div");empty.className="nutrition-empty";empty.textContent="No products in your catalogue yet. Add one from Stock to get started.";profile.append(empty)}
+ renderNutritionInputs("nutritionEditInputs",p);
+ $("nutritionReviewCategory").value=p?.category||"Shake";
+ const counts={};current().entries[day-1].filter(Boolean).forEach(name=>counts[name]=(counts[name]||0)+1);
+ const host=$("nutritionComparison");host.replaceChildren();
+ const label=$("nutritionDayLabel");label.textContent="Day "+day+" · Month "+month;
+ const names=Object.entries(counts),totals={},microTotals={};
+ if(!names.length){const empty=document.createElement("div");empty.className="nutrition-empty";empty.textContent="There are no products in this day’s plan yet. Add products in Today and they’ll appear here.";host.append(empty);return}
+ const list=document.createElement("div");list.className="nutrition-day-list";
+ names.forEach(([name,count])=>{
+  const item=product(name),n=item?.nutrition||blankNutrition(),row=document.createElement("div");row.className="nutrition-day-product";
+  const title=document.createElement("strong");title.textContent=name+" × "+count;
+  const summary=document.createElement("small");summary.textContent=item?formatNutrition(item):"Product profile unavailable";
+  row.append(title,summary);list.append(row);
+  nutritionFieldKeys.forEach((key,i)=>{const raw=n[key],value=typeof raw==="number"?raw:parseFloat(String(raw??""));if(raw!==""&&raw!=null&&Number.isFinite(value))totals[key]=(totals[key]||0)+value*count});
+  ["vitamins","minerals"].forEach(group=>Object.entries(n[group]||{}).forEach(([key,raw])=>{const value=typeof raw==="number"?raw:parseFloat(String(raw||""));if(raw!==""&&raw!=null&&Number.isFinite(value)){const unit=String(raw).match(/[a-zA-Zµ%]+$/)?.[0]||"";const id=group+"|"+key+"|"+unit;microTotals[id]=(microTotals[id]||0)+value*count}}));
+ });
+ host.append(list);
+ const totalEntries=Object.entries(totals);
+ if(totalEntries.length){
+  const section=document.createElement("div");section.className="nutrition-totals";
+  const heading=document.createElement("h3");heading.textContent="Combined nutrition · per planned servings";section.append(heading);
+  const grid=document.createElement("div");grid.className="nutrition-total-grid";
+  const labels={energy:["Energy","kcal"],protein:["Protein","g"],carbohydrates:["Carbohydrates","g"],fat:["Fat","g"],fibre:["Fibre","g"]};
+  ["energy","protein","carbohydrates","fat","fibre"].forEach(key=>{if(totals[key]==null)return;const card=document.createElement("div");card.className="nutrition-total";const value=document.createElement("b"),caption=document.createElement("span");value.textContent=Number(totals[key].toFixed(2))+" "+labels[key][1];caption.textContent=labels[key][0];card.append(value,caption);grid.append(card)});
+  section.append(grid);host.append(section);
+ }
+ const micros=Object.entries(microTotals);
+ if(micros.length){
+  const section=document.createElement("div");section.className="nutrition-micro-section";
+  const heading=document.createElement("h3");heading.textContent="Recorded vitamins & minerals · combined";section.append(heading);
+  const grid=document.createElement("div");grid.className="nutrition-micro-grid";
+  micros.forEach(([id,total])=>{const [group,name,unit]=id.split("|"),row=document.createElement("div");row.className="nutrition-micro-item";const a=document.createElement("span"),b=document.createElement("b");a.textContent=name;b.textContent=Number(total.toFixed(2))+(unit?" "+unit:"");row.append(a,b);grid.append(row)});
+  section.append(grid);host.append(section);
+ }
+ const note=document.createElement("p");note.className="nutrition-day-caption";note.textContent="Totals include only numeric values recorded in the product profiles. Blank or unconfirmed fields are excluded.";host.append(note);
+}
 function persistNutrition(p,host){if(!p)return;p.nutrition=readNutrition(host);p.category=$("nutritionReviewCategory").value||p.category||"";if(p.source)p.verificationStatus="Unverified — values must be checked against source";save();render();renderNutrition()}
 function renderInventory(){
  $("monthHeading").textContent="Month "+month+" inventory";
