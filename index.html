@@ -49,7 +49,7 @@ main{padding-bottom:32px}
 <div id="productList" style="margin-top:12px"></div>
 </details></div></details>
 </section>
-<section class="app-page" id="page-nutrition"><section class="panel"><h2>Review Nutrition</h2><p class="muted">Private to this browser on this device. Review full product profiles and compare products in the selected day’s plan.</p><label>Product profile<select id="nutritionReviewProduct"></select></label><label>Category<select id="nutritionReviewCategory"><option>Shake</option><option>Meal</option><option>Oatmeal</option><option>Bar</option><option>Dessert</option></select></label><div id="nutritionProfile"></div><div id="nutritionEditInputs"></div><button class="primary" id="saveNutritionEdit">Save nutrition changes</button></section><section class="panel"><h2>Selected day comparison</h2><p class="muted" id="nutritionDayLabel"></p><div id="nutritionComparison"></div></section><section class="panel"><h2>Catalogue source</h2><p><a href="https://nupopartner.com/products/momenta-reboot" target="_blank" rel="noopener">Momenta REBOOT product page</a></p><p class="muted">Catalogue names are seeded from the prior product extraction. Nutrition values are blank and marked unverified because the source page could not be accessed during this update.</p></section></section>
+<section class="app-page" id="page-nutrition"><section class="panel"><h2>Review Nutrition</h2><p class="muted">Private to this browser on this device. Review full product profiles and compare products in the selected day’s plan.</p><label>Product profile<select id="nutritionReviewProduct"></select></label><label>Category<select id="nutritionReviewCategory"><option>Shake</option><option>Meal</option><option>Oatmeal</option><option>Bar</option><option>Dessert</option></select></label><div id="nutritionProfile"></div><div id="nutritionEditInputs"></div><button class="primary" id="saveNutritionEdit">Save nutrition changes</button></section><section class="panel"><h2>Selected day comparison</h2><p class="muted" id="nutritionDayLabel"></p><div id="nutritionComparison"></div></section><section class="panel"><h2>Catalogue source</h2><p><a href="https://nupopartner.com/products/momenta-reboot" target="_blank" rel="noopener">Momenta REBOOT product page</a></p><p class="muted">Per-serving figures shown here were supplied from the manufacturer catalogue. Six- and seven-serving daily figures were not included in this data handoff, so they have not been invented. Spiced Mash, bars and desserts remain blank until their tables are supplied. Figures are not independently verified.</p></section></section>
 <section class="app-page" id="page-resources"><section class="panel"><h2>Programme links</h2>
 <p><a href="https://momentanewcastle.com/nhs-type-2-diabetes-path-to-remission/" target="_blank" rel="noopener">Momenta — participant resources</a></p>
 <p><a href="https://help.momenta.livahealth.com/en/category/eb2b47" target="_blank" rel="noopener">Momenta / Liva — Help Centre</a></p>
@@ -82,9 +82,37 @@ function loadData(){
 }
 loadData();
 const $=id=>document.getElementById(id),current=()=>months[month-1],product=name=>catalog.find(p=>p.name===name),portionCount=name=>product(name)?.portionsPerItem||1;
-const nutritionFieldKeys=["servingWeight","energy","protein","carbohydrates","fat","fibre"],nutritionLabels=["Serving weight (g)","Energy (kcal)","Protein (g)","Carbohydrates (g)","Fat (g)","Fibre (g)"],vitaminNames=["Vitamin A","Vitamin B1","Vitamin B2","Vitamin B3","Vitamin B6","Vitamin B12","Vitamin C","Vitamin D","Vitamin E","Vitamin K","Folate","Biotin","Pantothenic acid"],mineralNames=["Potassium","Chloride","Calcium","Phosphorus","Magnesium","Iron","Zinc","Copper","Manganese","Selenium","Iodine"],momentaSource="https://nupopartner.com/products/momenta-reboot";
+const nutritionFieldKeys=["servingWeight","energy","protein","carbohydrates","fat","fibre"],nutritionLabels=["Serving weight (g)","Energy (kcal)","Protein (g)","Carbohydrates (g)","Fat (g)","Fibre (g)"],vitaminNames=["Vitamin A","Vitamin B1","Vitamin B2","Vitamin B3","Vitamin B6","Vitamin B12","Vitamin C","Vitamin D","Vitamin E","Vitamin K","Folic acid","Biotin","Pantothenic acid"],mineralNames=["Potassium","Chloride","Calcium","Phosphorus","Magnesium","Iron","Zinc","Copper","Manganese","Selenium","Chromium","Molybdenum","Iodine"],momentaSource="https://nupopartner.com/products/momenta-reboot";
 function blankNutrition(){return {servingWeight:"",energy:"",protein:"",carbohydrates:"",fat:"",fibre:"",vitamins:{},minerals:{}}}
-function ensureNutrition(){catalog.forEach(p=>{if(!p.category)p.category=p.type==="Pudding"?"Dessert":p.type==="Bar"?"Bar":p.type==="Meal"?"Meal":"Shake";p.nutrition={...blankNutrition(),...(p.nutrition||{}),vitamins:{...(p.nutrition?.vitamins||{})},minerals:{...(p.nutrition?.minerals||{})}}});momenteRebootProducts.forEach(([name,category])=>{if(!product(name))catalog.push({name,type:category==="Dessert"?"Pudding":category,line:"Momenta REBOOT",portionsPerItem:1,category,nutrition:blankNutrition(),source:momentaSource,verificationStatus:"Unverified — source page unavailable during catalogue update",active:true})})}
+const momenteNutritionData={
+"Chocolate":{category:"Shake",servingWeight:32,energy:119,protein:13,carbohydrates:5.7,fat:3.7,fibre:3.3,vitamins:{"Vitamin A":"121 µg","Vitamin C":"19 mg","Vitamin D":"1.7 µg"},minerals:{"Calcium":"161 mg","Potassium":"541 mg","Magnesium":"38.5 mg","Iron":"3.2 mg","Zinc":"1.9 mg"}},
+"Chocolate Mint":{category:"Shake",servingWeight:32,energy:122,protein:13,carbohydrates:6.1,fat:4.4,fibre:3.3},
+"Caffe Latte":{category:"Shake",servingWeight:32,energy:119,protein:13,carbohydrates:6.6,fat:3.3,fibre:3.4},
+"Chai Latte":{category:"Shake",servingWeight:32,energy:120,protein:13,carbohydrates:6.8,fat:3.8,fibre:4.2},
+"Vanilla":{category:"Shake",servingWeight:32,energy:124,protein:12,carbohydrates:8.0,fat:3.9,fibre:2.7},
+"Mango Vanilla":{category:"Shake",servingWeight:32,energy:119,protein:13,carbohydrates:6.9,fat:3.2,fibre:3.3},
+"Blueberry Raspberry":{category:"Shake",servingWeight:32,energy:121,protein:13,carbohydrates:8.2,fat:3.7,fibre:2.4},
+"Strawberry":{category:"Shake",servingWeight:32,energy:119,protein:13,carbohydrates:6.8,fat:3.2,fibre:3.4},
+"Egg Omelette":{category:"Meal",servingWeight:34,energy:129,protein:14,carbohydrates:7.0,fat:4.2,fibre:3.6},
+"Chilli Sin Carne":{category:"Meal",servingWeight:34,energy:120,protein:13,carbohydrates:8.2,fat:2.8,fibre:3.7},
+"Risotto":{category:"Meal",servingWeight:34,energy:121,protein:14,carbohydrates:9.2,fat:2.6,fibre:3.5},
+"Couscous":{category:"Meal",servingWeight:34,energy:129,protein:12,carbohydrates:9.5,fat:4.1,fibre:1.9},
+"Apple Cinnamon":{category:"Oatmeal",servingWeight:32,energy:118,protein:14,carbohydrates:6.3,fat:3.4,fibre:3.6},
+"Vanilla Red Berries":{category:"Oatmeal",servingWeight:32,energy:120,protein:14,carbohydrates:6.7,fat:3.6,fibre:3.3}
+};
+const momenteNutritionAliases={"Chocolate":"Chocolate Shake","Chocolate Mint":"Chocolate Mint Shake","Caffe Latte":"Caffe Latte Shake","Chai Latte":"Chai Latte Shake","Vanilla":"Vanilla Shake"};
+function ensureNutrition(){
+catalog.forEach(p=>{if(!p.category)p.category=p.type==="Pudding"?"Dessert":p.type==="Bar"?"Bar":p.type==="Meal"?"Meal":"Shake";p.nutrition={...blankNutrition(),...(p.nutrition||{}),vitamins:{...(p.nutrition?.vitamins||{})},minerals:{...(p.nutrition?.minerals||{})}}});
+momenteRebootProducts.forEach(([name,category])=>{if(!product(name))catalog.push({name,type:category==="Dessert"?"Pudding":category,line:"Momenta REBOOT",portionsPerItem:1,category,nutrition:blankNutrition(),source:momentaSource,verificationStatus:"Awaiting source figures",active:true})});
+Object.entries(momenteNutritionData).forEach(([sourceName,data])=>{
+const p=product(momenteNutritionAliases[sourceName]||sourceName)||product(sourceName);if(!p)return;
+p.category=data.category;p.source=momentaSource;p.sourceBasis="Per serving — figures supplied by user from manufacturer catalogue";
+const n=p.nutrition||(p.nutrition=blankNutrition());
+["servingWeight","energy","protein","carbohydrates","fat","fibre"].forEach(k=>{if((n[k]===""||n[k]===null||n[k]===undefined)&&data[k]!==undefined)n[k]=data[k]});
+["vitamins","minerals"].forEach(group=>{n[group]||(n[group]={});Object.entries(data[group]||{}).forEach(([key,value])=>{if(!n[group][key])n[group][key]=value})});
+p.verificationStatus="Manufacturer catalogue figures supplied by user — per serving; not independently verified";
+});
+}
 ensureNutrition();
 function save(){try{localStorage.setItem(storeKey,JSON.stringify({catalog,months,dailyTarget,targetDays}))}catch(e){alert("Couldn't save changes on this device. Check available browser storage.")}}
 function allEntries(){return months.flatMap(m=>m.entries)}
@@ -220,7 +248,7 @@ $("quickAdd").onclick=()=>{const name=$("quickProduct").value;if(!name)return;if
 $("reset").onclick=()=>{if(confirm("Reset all three months of logged products? Inventory quantities will be kept.")){months.forEach(m=>{m.entries=Array.from({length:28},()=>[]);m.consumed=Array.from({length:28},()=>[]);m.scheduleTimes=Array.from({length:28},()=>[]);m.takenAt=Array.from({length:28},()=>[])});save();render()}};
 render();
 renderNutritionInputs("nutritionInputs");renderNutrition();
-$("nutritionPreset").onchange=()=>{const name=$("nutritionPreset").value;if(!name)return;const existing=product(name);$("productName").value=name;$("nutritionCategory").value=existing?.category||momenteRebootProducts.find(x=>x[0]===name)?.[1]||"";if(existing){$("productType").value=existing.type;$("productLine").value=existing.line;$("productPortions").value=existing.portionsPerItem}renderNutritionInputs("nutritionInputs",existing)};
+$("nutritionPreset").onchange=()=>{const name=$("nutritionPreset").value;if(!name)return;const existing=product(momenteNutritionAliases[name]||name)||product(name);$("productName").value=existing?.name||name;$("nutritionCategory").value=existing?.category||momenteRebootProducts.find(x=>x[0]===name)?.[1]||"";if(existing){$("productType").value=existing.type;$("productLine").value=existing.line;$("productPortions").value=existing.portionsPerItem}renderNutritionInputs("nutritionInputs",existing)};
 $("nutritionReviewProduct").onchange=renderNutrition;
 $("saveNutritionEdit").onclick=()=>persistNutrition(product($("nutritionReviewProduct").value),"nutritionEditInputs");
 const waterDateKey="tdr-water-date",waterAmountKey="tdr-water-ml";
