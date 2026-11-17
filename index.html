@@ -211,7 +211,7 @@ const n=p.nutrition||(p.nutrition=blankNutrition());
 ["servingWeight","energy","protein","carbohydrates","fat","fibre"].forEach(k=>{if((n[k]===""||n[k]===null||n[k]===undefined)&&data[k]!==undefined){n[k]=data[k];if(data.estimatedFields?.includes(k)){n.estimatedFields=[...new Set([...(n.estimatedFields||[]),k])];n.estimatedFrom=data.estimatedFrom||"Chocolate Bar"}}});
 ["vitamins","minerals","other"].forEach(group=>{n[group]||(n[group]={});Object.entries(data[group]||{}).forEach(([key,value])=>{if(n[group][key]===undefined||n[group][key]==="")n[group][key]=value})});if(data.referencePer100g)n.referencePer100g=data.referencePer100g;if(data.dataWarnings)n.dataWarnings=data.dataWarnings;if(momenteDailyReference6[sourceName])n.reference6Servings=momenteDailyReference6[sourceName];
 if(data.referencePer100g)n.referencePer100g=data.referencePer100g;if(data.additionalPerServing)n.additionalPerServing=data.additionalPerServing;
-p.sourceBasis=data.referencePer100g?"Manufacturer screenshot — macros per 100g; vitamins and minerals per 60g where supplied; blank macro serving cells retained":"Per serving — figures transcribed from manufacturer catalogue screenshot";
+p.sourceBasis=(data.referencePer100g?"Manufacturer screenshot — macros per 100g; vitamins and minerals per 60g where supplied":"Per serving — figures transcribed from manufacturer catalogue screenshot")+(data.estimatedFields?"; * macro values provisionally copied from Chocolate Bar":"");
 p.verificationStatus="Manufacturer catalogue screenshots supplied by user — not independently verified";p.dateChecked="2026-11-17";
 });
 }
