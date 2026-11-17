@@ -272,7 +272,7 @@ function renderNutrition(){
   if(n.referencePer100g&&n.additionalPerServing){
    const section=document.createElement("div");section.className="nutrition-micro-section";
    const heading=document.createElement("h3");heading.textContent="Additional nutrition · per 100g and per 60g serving";section.append(heading);
-   const rows=[["Energy","1,407 kJ / 336 kcal","844.2 kJ / 201.6 kcal"],["Saturates","4.3 g","2.58 g"],["Sugars","4.1 g","2.46 g"],["Salt","0.73 g","0.438 g"],["Collagen hydrolysate","5.0 g","3.0 g"],["Sodium","288 mg","172.8 mg"],["Linoleic acid","2.4 g","1.44 g"]];
+   const rows=[["Energy","1,407 kJ / 336 kcal","844.2 kJ / 201.6 kcal"],["Saturates","4.3 g","2.58 g"],["Sugars","4.1 g","2.46 g"],["Salt","0.73 g","0.438 g"],["Collagen hydrolysate","5.0 g","3.0 g"],["Sodium","288 mg","172.8 mg"],["Linoleic acid","2.4 g","1.44 g"],...Object.entries(n.referencePer100g.vitamins||{}).map(([name,value])=>[name,value,(n.vitamins||{})[name]||"—"]),...Object.entries(n.referencePer100g.minerals||{}).map(([name,value])=>[name,value,(n.minerals||{})[name]||"—"])];
    const list=document.createElement("div");list.className="nutrition-micro-grid";
    rows.forEach(([name,per100,per60])=>{const item=document.createElement("div");item.className="nutrition-micro-item";const label=document.createElement("span"),amount=document.createElement("b");label.textContent=name+" · 100g / 60g";amount.textContent=per100+" / "+per60;item.append(label,amount);list.append(item)});
    section.append(list);
