@@ -391,6 +391,7 @@ function render(){
  $("progressText").textContent=completedAll+"/84 days completed · "+Math.round(programmePct)+"% of first phase";
  $("logged").textContent=sum+" portions";
  renderInventory();renderInsights();
+ if($("page-nutrition").classList.contains("active"))renderNutrition();
 }
 document.querySelectorAll(".monthBtn").forEach(b=>b.onclick=()=>{month=+b.dataset.month;day=1;render()});
 $("carryForward").onclick=carryForward;
