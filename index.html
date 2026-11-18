@@ -154,7 +154,7 @@ main{padding-bottom:32px}
 const initialProducts=[
  ["Chocolate Shake","Shake",1,12],["Chocolate Mint Shake","Shake",1,10],["Caffe Latte Shake","Shake",1,10],["Chai Latte Shake","Shake",1,12],["Vanilla Shake","Shake",1,10],["Blueberry Raspberry","Shake",1,12],["Strawberry","Shake",1,10],["Egg Omelette","Meal",1,10],["Lemon Pudding","Pudding",1,12],["Chocolate Pudding","Pudding",1,12],["Mango Vanilla","Shake",1,12],["Vanilla Red Berries","Shake",1,12],["Apple Cinnamon","Pudding",1,12],["Chocolate Bar","Bar",2,15],["Cookie Crunch Bar","Bar",2,15]
 ];
-let target=196,dailyTarget=7,targetDays=28;const storeKey="tdr-tracker-v2",legacyKey="tdr-month1-pwa-v1";let day=1,month=1;
+let target=196,dailyTarget=7,targetDays=28;const storeKey="tdr-tracker-v2",legacyKey="tdr-month1-pwa-v1",selectedDayKey="tdr-selected-day-v1";let day=1,month=1;
 let catalog=initialProducts.map(([name,type,portionsPerItem,stock])=>({name,type,line:"Nupo Diet (TDR)",portionsPerItem,category:type==="Pudding"?"Dessert":type==="Bar"?"Bar":type==="Meal"?"Meal":"Shake",nutrition:{},active:true}));
 const momenteRebootProducts=[["Chocolate","Shake"],["Chocolate Mint","Shake"],["Caffe Latte","Shake"],["Chai Latte","Shake"],["Vanilla","Shake"],["Mango Vanilla","Shake"],["Blueberry Raspberry","Shake"],["Strawberry","Shake"],["Egg Omelette","Meal"],["Chilli Sin Carne","Meal"],["Risotto","Meal"],["Couscous","Meal"],["Apple Cinnamon","Oatmeal"],["Vanilla Red Berries","Oatmeal"],["Spiced Mash","Meal"],["Mint Chocolate Bar","Bar"],["Chocolate Pudding","Dessert"],["Lemon Pudding","Dessert"],["Cookie Crunch Bar","Bar"]];
 const defaultTimes=["09:00","11:00","13:00","15:30","18:45","20:45"];
@@ -169,6 +169,9 @@ function loadData(){
  }catch(e){}
 }
 loadData();
+function loadSelectedDay(){try{const saved=JSON.parse(localStorage.getItem(selectedDayKey)||"null");if(saved&&Number.isInteger(saved.day)&&saved.day>=1&&saved.day<=28&&Number.isInteger(saved.month)&&saved.month>=1&&saved.month<=3){day=saved.day;month=saved.month}}catch(e){}}
+function saveSelectedDay(){try{localStorage.setItem(selectedDayKey,JSON.stringify({day,month}))}catch(e){}}
+loadSelectedDay();
 const $=id=>document.getElementById(id),current=()=>months[month-1],product=name=>catalog.find(p=>p.name===name),portionCount=name=>product(name)?.portionsPerItem||1;
 const nutritionFieldKeys=["servingWeight","energy","protein","carbohydrates","fat","fibre"],nutritionLabels=["Serving weight (g)","Energy (kcal)","Protein (g)","Carbohydrates (g)","Fat (g)","Fibre (g)"],vitaminNames=["Vitamin A","Vitamin B1","Vitamin B2","Vitamin B3","Vitamin B6","Vitamin B12","Vitamin C","Vitamin D","Vitamin E","Vitamin K","Folic acid","Biotin","Pantothenic acid"],mineralNames=["Potassium","Chloride","Calcium","Phosphorus","Magnesium","Iron","Zinc","Copper","Manganese","Selenium","Chromium","Molybdenum","Iodine"],momentaSource="https://nupopartner.com/products/momenta-reboot";
 function blankNutrition(){return {servingWeight:"",energy:"",protein:"",carbohydrates:"",fat:"",fibre:"",vitamins:{},minerals:{},other:{}}}
@@ -401,12 +404,13 @@ function renderInsights(){
  const expired=catalog.filter(p=>p.active&&p.expiry&&p.expiry<new Date().toISOString().slice(0,10));const forecast="Stock estimates will improve as you log what you consume."; $("stockForecast").textContent=(expired.length?"Check best-before dates: "+expired.map(p=>p.name+" ("+p.expiry+")").join(", ")+". ":"")+forecast;
 }
 function render(){
+ saveSelectedDay();
  const entries=current().entries,list=entries[day-1];current().consumed=current().consumed||Array.from({length:28},()=>[]);
- const consumed=current().consumed[day-1]||[],times=current().scheduleTimes[day-1]||(current().scheduleTimes[day-1]=[]),takenAt=current().takenAt[day-1]||(current().takenAt[day-1]=[]);while(times.length<list.length)times.push(defaultTimes[times.length]||"21:30");while(takenAt.length<list.length)takenAt.push("");const planned=list.reduce((s,n)=>s+portionCount(n),0),had=list.reduce((s,n,i)=>s+(consumed[i]?portionCount(n):0),0);
+ const consumed=current().consumed[day-1]||[],times=current().scheduleTimes[day-1]||(current().scheduleTimes[day-1]=[]),takenAt=current().takenAt[day-1]||(current().takenAt[day-1]=[]);while(times.length<list.length)times.push(defaultTimes[times.length]||"21:30");while(takenAt.length<list.length)takenAt.push("");const planned=list.reduce((s,n)=>s+portionCount(n),0),had=list.reduce((s,n,i)=>s+(consumed[i]?portionCount(n):0),0);const dayComplete=list.length>0&&had>=dailyTarget;
  const sum=months.reduce((total,m)=>total+m.entries.reduce((s,arr,i)=>s+arr.reduce((t,n,j)=>t+((m.consumed[i]||[])[j]?portionCount(n):0),0),0),0);
  const completedAll=months.reduce((total,m)=>total+m.entries.filter((arr,i)=>arr.length&&arr.reduce((s,n,j)=>s+((m.consumed[i]||[])[j]?portionCount(n):0),0)>=dailyTarget).length,0);
  const programmePct=Math.min(100,completedAll/84*100);
- $("dayTitle").textContent="Day "+day+" of 28 · Month "+month+" of 3";$("dayRange").value=day;$("prev").disabled=day===1;$("next").disabled=day===28;
+ $("dayTitle").textContent="Day "+day+" of 28 · Month "+month+" of 3"+(dayComplete?" · Complete ✓":"");$("dayRange").value=day;$("prev").disabled=day===1;$("next").disabled=day===28;
  $("dayCount").textContent=planned+" / "+dailyTarget+" portions planned";$("consumedCount").textContent=had+" portions";$("leftCount").textContent=Math.max(0,planned-had)+" portions";$("dayProgress").style.width=(planned?Math.min(100,had/planned*100):0)+"%";
  $("slots").replaceChildren();
  list.forEach((name,i)=>{const row=document.createElement("div");row.className="slot";const sel=document.createElement("select");const empty=document.createElement("option");empty.value="";empty.textContent="Choose product";sel.append(empty);catalog.filter(p=>(p.active||p.name===name)&&p.line!=="One Meal").forEach(p=>{const o=document.createElement("option");o.value=p.name;o.textContent=p.name;sel.append(o)});sel.value=name;sel.onchange=()=>{list[i]=sel.value;if(!sel.value){list.splice(i,1);consumed.splice(i,1);times.splice(i,1);takenAt.splice(i,1)}save();render()};
