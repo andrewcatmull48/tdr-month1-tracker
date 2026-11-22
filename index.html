@@ -235,27 +235,42 @@ function makeRandomPlan(){
  const recent=new Set(current().entries.slice(Math.max(0,day-3),day-1).flat());
  const weekStart=Math.floor((day-1)/7)*7;
  const omelettesThisWeek=current().entries.slice(weekStart,weekStart+7).reduce((n,a,i)=>n+(weekStart+i===day-1?0:a.filter(x=>x==="Egg Omelette").length),0);
- const singles=available.filter(p=>p.portionsPerItem===1&&p.name!=="Egg Omelette");
- const cafe=shuffle(singles.filter(p=>["Caffe Latte Shake","Chai Latte Shake"].includes(p.name)&&!recent.has(p.name)));
- const cafeFallback=shuffle(singles.filter(p=>["Caffe Latte Shake","Chai Latte Shake"].includes(p.name)));
- const first=(cafe.length?cafe:cafeFallback)[0];
- if(!first){alert("Add stock for a café-style shake to build the random plan.");return}
- const chosen=[first.name],usedNames=new Set(chosen);
- const egg=available.find(p=>p.name==="Egg Omelette");
- const useEgg=!!egg&&omelettesThisWeek<2&&Math.random()<0.12;
+ const singles=available.filter(p=>p.portionsPerItem===1);
  const bars=shuffle(available.filter(p=>p.type==="Bar"&&p.portionsPerItem===2&&!recent.has(p.name))).concat(shuffle(available.filter(p=>p.type==="Bar"&&p.portionsPerItem===2&&recent.has(p.name))));
  const chosenBar=bars[0]||null;
- const singlesNeeded=7-(chosenBar?2:0)-(useEgg?1:0);
- let pool=shuffle(singles.filter(p=>!usedNames.has(p.name)&&!recent.has(p.name)));
- if(pool.length<singlesNeeded-chosen.length)pool=shuffle(singles.filter(p=>!usedNames.has(p.name)));
- while(chosen.length<singlesNeeded&&pool.length){const p=pool.shift();if(availableQty(p.name)>0&&!usedNames.has(p.name)){chosen.push(p.name);usedNames.add(p.name)}}
- if(chosen.length<singlesNeeded){alert("There isn't enough available stock to build an exact 7-portion plan. Add stock or edit the day manually.");return}
- if(useEgg)chosen.push("Egg Omelette");
- const plan=chosenBar?[...chosen,chosenBar.name]:chosen;
+ const egg=available.find(p=>p.name==="Egg Omelette");
+ const useEgg=!!egg&&omelettesThisWeek<2&&Math.random()<0.12;
+ const singlesNeeded=7-(chosenBar?2:0);
+ const chosen=[];
+ const usedNames=new Set();
+ const take=p=>{if(p&&availableQty(p.name)>0&&!usedNames.has(p.name)&&chosen.length<singlesNeeded){chosen.push(p.name);usedNames.add(p.name);return true}return false};
+ // Start with a breakfast-style option where stock permits.
+ const morning=shuffle(singles.filter(p=>p.category==="Oatmeal"||["Caffe Latte Shake","Chai Latte Shake"].includes(p.name)));
+ const morningFresh=morning.filter(p=>!recent.has(p.name));
+ take((morningFresh.length?morningFresh:morning)[0]);
+ // Fill the daytime with a shake-led mix; other products remain in the rotation.
+ const pool=shuffle(singles.filter(p=>!usedNames.has(p.name)&&p.name!=="Egg Omelette"));
+ while(chosen.length<singlesNeeded){
+  const remaining=pool.filter(p=>!usedNames.has(p.name)&&availableQty(p.name)>0);
+  if(!remaining.length)break;
+  const fresh=remaining.filter(p=>!recent.has(p.name));
+  const candidates=fresh.length?fresh:remaining;
+  const weighted=[];
+  candidates.forEach(p=>{const weight=p.category==="Shake"?4:p.category==="Oatmeal"?1:2;for(let i=0;i<weight;i++)weighted.push(p)});
+  take(weighted[Math.floor(Math.random()*weighted.length)]);
+ }
+ if(useEgg&&chosen.length<singlesNeeded)take(egg);
+ if(chosen.length<singlesNeeded){alert("There isn't enough distinct available stock to build a varied 7-portion plan. Add stock or edit the day manually.");return}
+ let plan=[...chosen];
+ if(chosenBar){
+  // Keep bars away from the first and last positions.
+  const min=1,max=Math.max(1,plan.length-1);
+  const insertAt=min+Math.floor(Math.random()*(max-min+1));
+  plan.splice(insertAt,0,chosenBar.name);
+ }
  if(plan.reduce((n,name)=>n+portionCount(name),0)!==7){alert("Couldn't build an exact 7-portion plan. Please try again.");return}
  current().entries[day-1]=plan;save();render();
 }
-
 function renderNutritionInputs(hostId,p=null){const host=$(hostId);host.replaceChildren();const n=p?.nutrition||blankNutrition(),g=document.createElement("div");g.className="nutrition-grid";nutritionFieldKeys.forEach((key,i)=>{const l=document.createElement("label");l.textContent=nutritionLabels[i];const x=document.createElement("input");x.type="number";x.step="any";x.min="0";x.dataset.nkey=key;x.value=n[key]??"";l.append(x);g.append(l)});host.append(g);[[ "Vitamins",vitaminNames,"vitamins"],["Minerals",mineralNames,"minerals"]].forEach(([title,names,key])=>{const sec=document.createElement("div");sec.className="nutrition-section";const h=document.createElement("h3");h.textContent=title;sec.append(h);const grid=document.createElement("div");grid.className="nutrition-grid";names.forEach(name=>{const l=document.createElement("label");l.textContent=name+" (amount)";const x=document.createElement("input");x.type="text";x.placeholder="Amount and unit";x.dataset.group=key;x.dataset.nkey=name;x.value=n[key]?.[name]??"";l.append(x);grid.append(l)});sec.append(grid);host.append(sec)})}
 function readNutrition(hostId){const n=blankNutrition();$(hostId).querySelectorAll("[data-nkey]").forEach(x=>{if(x.dataset.group){if(x.value.trim())n[x.dataset.group][x.dataset.nkey]=x.value.trim()}else n[x.dataset.nkey]=x.value.trim()});return n}
 function formatNutrition(p){const n=p.nutrition||blankNutrition(),out=[];nutritionFieldKeys.forEach((key,i)=>{if(n[key]!=="")out.push(nutritionLabels[i]+": "+n[key]+((n.estimatedFields||[]).includes(key)?"*":""))});["vitamins","minerals"].forEach(k=>Object.entries(n[k]||{}).forEach(([name,v])=>{if(v!=="")out.push(name+": "+v)}));return out.length?out.join(" · "):"No verified values entered."}
